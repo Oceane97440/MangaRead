@@ -1,0 +1,43 @@
+{
+  "name": "mangaread",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "start-node": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Oceane97440/MangaRead.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Oceane97440/MangaRead/issues"
+  },
+  "homepage": "https://github.com/Oceane97440/MangaRead#readme",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.1",
+    "cookie-parser": "^1.4.6",
+    "cookie-session": "^2.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "electronmon": "^2.0.2",
+    "express": "^4.17.2",
+    "express-fileupload": "^1.2.1",
+    "jquery": "^3.5.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
+    "nodemon": "^2.0.15",
+    "path": "^0.12.7",
+    "sequelize": "^5.21.13",
+    "validator": "^13.7.0"
+  },
+  "devDependencies": {
+    "electron": "^16.0.6"
+  }
+}
