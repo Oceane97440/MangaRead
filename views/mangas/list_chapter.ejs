@@ -1,0 +1,25 @@
+<table border="1">
+    <thead>
+        <tr>
+            <th>Titre du manga</th>
+            <th>Chapitres</th>
+            <th>Ajouter des pages au chapitre</th>
+
+
+
+        </tr>
+    </thead>
+    <tbody>
+        <% for (let i=0; i < mangas_chapters.length; i++) { %>
+        <tr>
+
+            <td><%= mangas_chapters[i].manga.title %></td>
+            <td><%= mangas_chapters[i].chapter.title %></td>
+            <td><a href="/mangas/pages/create/<%= mangas_chapters[i].chapter_id %>">Ajouter une pages</a></td>
+ 
+
+        </tr>
+        <% } %>
+
+    </tbody>
+</table>

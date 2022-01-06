@@ -24,7 +24,12 @@ const ModelMangasChapters = require("../models/model.mangas_chapter")
 exports.index = async (req, res) => {
 
 
-    res.render('mangas/create')
+    const data = new Object();
+    data.categories = await ModelCategory.findAll({
+        
+    });
+
+    res.render('mangas/create',data)
 }
 
 exports.mangas_add = async (req, res) => {
@@ -38,15 +43,16 @@ exports.mangas_add = async (req, res) => {
     var cover_manga = '/uploads/covers/' + cover.name
 
     var body = {
-        title: "Dr Stone",
-        description: "Retour à la vie primitif sans la sience",
-        author: "Toto",
-        date: "2022-01-01",
-        status: "En cours",
-        category_id: 1
+        title: req.body.title,
+        description: req.body.description,
+        author: req.body.author,
+        date: req.body.date,
+        status: req.body.status,
+        category_id: req.body.category_id,
 
     }
 
+    console.log(req.body)
 
     await ModelMangas.create({
 
@@ -59,7 +65,10 @@ exports.mangas_add = async (req, res) => {
         score_total: 0,
         category_id: body.category_id,
 
-    });
+    }).then(()=> {
+
+        res.redirect('/admin')
+    })
 
 
 }
@@ -83,8 +92,8 @@ exports.chapter_add = async (req, res) => {
 
 
     var body = {
-        title: 'Chapitre 1',
-        manga_id: '1'
+        title: req.body.title,
+        manga_id: req.body.manga_id
     }
     console.log(req.body)
 
@@ -110,7 +119,7 @@ exports.chapter_add = async (req, res) => {
                 chapter_id: chapter.chapter_id
             });
 
-            res.redirect('/admin');
+            res.redirect(`/mangas/chapter/${body.manga_id}`);
 
         } else {
             req.session.message = {
@@ -123,4 +132,54 @@ exports.chapter_add = async (req, res) => {
 
     });
 
+}
+
+exports.chapter_all = async (req, res) => {
+
+
+
+    const data = new Object();
+
+    data.mangas_chapters = await ModelMangasChapters.findAll({
+     
+        where:{
+            manga_id: req.params.manga_id
+        },
+        include: [{
+                model: ModelMangas
+
+            },
+            {
+                model: ModelChapter,
+
+            }
+        ]
+
+    });
+
+   console.log(data.mangas_chapters)
+
+   res.render('mangas/list_chapter',data)
+
+}
+
+
+exports.pages = async (req, res) => {
+
+
+    console.log(req.params.chapter_id)
+
+    const data = new Object();
+    data.chapter = await ModelChapter.findOne({
+        where: {
+            chapter_id: req.params.chapter_id
+        }
+    });
+
+    res.render("mangas/list_chapter", data)
+}
+
+exports.pages_add = async (req, res) => {
+
+    
 }

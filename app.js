@@ -21,30 +21,63 @@ const mangas_chapters = require('./app/models/model.mangas_chapter')
 
 
 //un mangas attribuer un user un user posséde un à plusieurs manga en favoris
-mangas.hasOne(users_mangas, {
-  foreignKey: 'mangas_id',
-  onDelete: 'cascade',
-  hooks: true
-});
 users.hasMany(users_mangas, {
   foreignKey: 'user_id',
   onDelete: 'cascade',
   hooks: true
 });
+mangas.hasMany(users_mangas, {
+  foreignKey: 'manga_id',
+  onDelete: 'cascade',
+  hooks: true
+});
 
+users_mangas.belongsTo(users, {
+  foreignKey: 'user_id',
+  onDelete: 'cascade',
+  hooks: true
+});
+
+users_mangas.belongsTo(mangas, {
+  foreignKey: 'manga_id',
+  onDelete: 'cascade',
+  hooks: true
+});
+
+
+
+
+
+//un mangas attribuer un user un user posséde un à plusieurs manga en favoris
 chapter.hasMany(chapters_pages, {
   foreignKey: 'chapter_id',
   onDelete: 'cascade',
   hooks: true
 });
-pages.hasOne(chapters_pages, {
+pages.hasMany(chapters_pages, {
+  foreignKey: 'page_id',
+  onDelete: 'cascade',
+  hooks: true
+});
+chapters_pages.belongsTo(chapter, {
+  foreignKey: 'chapter_id',
+  onDelete: 'cascade',
+  hooks: true
+});
+
+chapters_pages.belongsTo(pages, {
   foreignKey: 'page_id',
   onDelete: 'cascade',
   hooks: true
 });
 
+
+
+
+//un mangas attribuer un user un user posséde un à plusieurs manga en favoris
+
 mangas.hasMany(mangas_chapters, {
-  foreignKey: 'mangas_id',
+  foreignKey: 'manga_id',
   onDelete: 'cascade',
   hooks: true
 });
@@ -53,6 +86,21 @@ chapter.hasOne(mangas_chapters, {
   onDelete: 'cascade',
   hooks: true
 });
+mangas_chapters.belongsTo(chapter, {
+  foreignKey: 'chapter_id',
+  onDelete: 'cascade',
+  hooks: true
+});
+
+mangas_chapters.belongsTo(mangas, {
+  foreignKey: 'manga_id',
+  onDelete: 'cascade',
+  hooks: true
+});
+
+
+//un mangas possède une categorie
+
 
 mangas.belongsTo(category, {
   foreignKey: 'category_id',

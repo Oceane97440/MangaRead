@@ -1,5 +1,25 @@
 <form action="/mangas/create" method="POST" enctype="multipart/form-data">
 
+    <input type="text" class="form-control" name="title" id="title" value="">
+    <input type="text" class="form-control" name="description" id="description" value="">
+    <input type="text" class="form-control" name="author" id="author" value="">
+    <input type="date" class="form-control" name="date" id="date" value="">
+
+    <select name="status" >
+        <option value="" disabled>Selectionner le status</option>
+        <option value="En cours">En cours</option>
+        <option value="En pause">En pause</option>
+        <option value="Terminer">Terminer</option>
+    
+    </select>
+    <select name="category_id" >
+        <option value="" disabled>Selectionner la categorie</option>
+        <% for (let i=0; i < categories.length; i++) { %>
+        <option value="<%= categories[i].category_id %>"><%= categories[i].label %></option>
+        <% } %>
+
+    
+    </select>
 
 
     <input type="file" class="form-control" name="cover" id="cover" value="">
