@@ -9,11 +9,64 @@ const fileUpload = require('express-fileupload');
 const database = require('./app/config/database');
 
 // Import des models 
-const users = require('./app/models/models.users');
+const users = require('./app/models/model.users');
+const category = require('./app/models/model.category')
+const mangas = require('./app/models/model.mangas')
+const chapter = require('./app/models/model.chapter')
+const pages = require('./app/models/model.pages')
+const chapters_pages = require('./app/models/model.chapters_pages')
+const users_mangas = require('./app/models/model.users_mangas')
+const mangas_chapters = require('./app/models/model.mangas_chapter')
+
+
+
+//un mangas attribuer un user un user posséde un à plusieurs manga en favoris
+mangas.hasOne(users_mangas, {
+  foreignKey: 'mangas_id',
+  onDelete: 'cascade',
+  hooks: true
+});
+users.hasMany(users_mangas, {
+  foreignKey: 'user_id',
+  onDelete: 'cascade',
+  hooks: true
+});
+
+chapter.hasMany(chapters_pages, {
+  foreignKey: 'chapter_id',
+  onDelete: 'cascade',
+  hooks: true
+});
+pages.hasOne(chapters_pages, {
+  foreignKey: 'page_id',
+  onDelete: 'cascade',
+  hooks: true
+});
+
+mangas.hasMany(mangas_chapters, {
+  foreignKey: 'mangas_id',
+  onDelete: 'cascade',
+  hooks: true
+});
+chapter.hasOne(mangas_chapters, {
+  foreignKey: 'chapter_id',
+  onDelete: 'cascade',
+  hooks: true
+});
+
+mangas.belongsTo(category, {
+  foreignKey: 'category_id',
+  onDelete: 'cascade',
+  hooks: true
+});
+
+
+
+
 
 database
-    .sequelize
-    .sync();
+  .sequelize
+  .sync();
 sequelize = database.sequelize;
 Sequelize = database.Sequelize;
 
@@ -48,14 +101,16 @@ app.use(cookieSession({
  * UTILISATEUR CONNECTÉ
  */
 
- app.get('/*', function (req, res, next) {
+app.get('/*', function (req, res, next) {
   res.locals.user = {}
   if (req.session.user) {
 
-      res.locals.user.user_email = req.session.user.user_email;
-      res.locals.user.user_role = req.session.user.user_role;
+    res.locals.user.email = req.session.user.email;
+    res.locals.user.username = req.session.user.username;
+    res.locals.user.image = req.session.user.image;
+    res.locals.user.role = req.session.user.role;
 
-      //console.log(res.locals.user.user_email)
+    console.log(res.locals.user)
   }
   next();
 });
@@ -64,9 +119,12 @@ app.post('/*', function (req, res, next) {
   res.locals.user = {}
   // nom de l'utilisateur connecté (dans le menu) accessible pour toutes les vues
   if (req.session.user) {
-      res.locals.user.user_email = req.session.user.user_email;
-      res.locals.user.user_role = req.session.user.user_role;
-      //console.log(res.locals.user.user_email)
+    res.locals.user.email = req.session.user.email;
+    res.locals.user.username = req.session.user.username;
+    res.locals.user.image = req.session.user.image;
+    res.locals.user.role = req.session.user.role;
+
+    console.log(res.locals.user.email)
   }
   next();
 });
@@ -85,10 +143,12 @@ app.use((req, res, next) => {
 // Routes handler
 const index = require('./app/routes/routes.index')
 app.use('/', index);
+const manga = require('./app/routes/routes.manga')
+app.use('/mangas', manga);
 
 app.set("port", process.env.PORT || 8890);
 
 
 app.listen(app.get("port"), () => {
-    console.log(`server on port ${app.get("port")}`);
+  console.log(`server on port ${app.get("port")}`);
 });

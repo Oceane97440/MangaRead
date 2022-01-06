@@ -7,7 +7,13 @@ const fs = require('fs');
 const Utilities = require('../functions/functions.utilities');
 
 
-const ModelUser = require("../models/models.users")
+const ModelUser = require("../models/model.users")
+const ModelMangas = require("../models/model.mangas")
+const ModelChapter = require("../models/model.chapter")
+const ModelPage = require("../models/model.pages")
+const ModelCategory = require("../models/model.category")
+const ModelUserManga = require("../models/model.users_mangas")
+const ModelChapterPage = require("../models/model.chapters_pages")
 
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const PASSWORD_REGEX = /^(?=.*\d).{4,12}$/;
@@ -135,9 +141,7 @@ exports.signup_add = async (req, res) => {
     } catch (error) {
         console.log(error);
         var statusCoded = error.response;
-        res.render("error.ejs", {
-            statusCoded: statusCoded
-        });
+
     }
 
 }
@@ -147,4 +151,100 @@ exports.signup_add = async (req, res) => {
 exports.login = async (req, res) => {
 
     res.render('users/login')
+}
+
+exports.login_add = async (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+
+
+
+    try {
+        // verifie si les donnée son correcte et non null 
+        if (email == '' || password == '') {
+            req.session.message = {
+                type: 'danger',
+                intro: 'Erreur',
+                message: 'Email ou mot passe est incorrect'
+            }
+            return res.redirect('/login');
+        }
+
+        // verifie si le email est présent dans la base
+        ModelUser.findOne({
+            where: {
+                email: email
+            }
+        }).then(async function (user) {
+            // si email trouvé
+            if (user) {
+                console.log(user)
+                // on verifie si l'utilisateur à utiliser le bon mot de passe avec bcrypt
+                const isEqual = await bcrypt.compare(password, user.password);
+                // Si le mot de passe correpond au caratère hashé
+                if (isEqual) {
+                    if (user.email !== email && user.password !== password) {
+                        res.redirect('/login');
+                    } else {
+
+                        // use session for user connected
+                        req.session.user = user;
+
+                       // console.log(req.session)
+
+                        if (req.session.user.role === 1) {
+
+
+                            res.redirect("/admin")
+
+                        } else {
+                            res.redirect('/favoris');
+
+                        }
+
+                    }
+
+                } else {
+                    req.session.message = {
+                        type: 'danger',
+                        intro: 'Erreur',
+                        message: 'Adresse email ou mot de passe invalide"'
+                    }
+                    return res.redirect('/login');
+                }
+
+            } else {
+                req.session.message = {
+                    type: 'danger',
+                    intro: 'Erreur',
+                    message: 'Adresse email ou mot de passe invalide'
+                }
+                return res.redirect('/login');
+            }
+
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.redirect('/login');
+    }
+
+}
+
+
+exports.favoris = async (req, res) => {
+
+
+    res.render('users/favoris')
+}
+
+exports.admin = async (req, res) => {
+
+    const data = new Object();
+    data.mangas = await ModelMangas.findAll({
+        include: [{
+            model: ModelCategory
+        }]
+    });
+    res.render('admin/dashboard',data)
 }
