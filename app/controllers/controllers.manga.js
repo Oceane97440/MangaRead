@@ -14,7 +14,10 @@ const ModelPage = require("../models/model.pages")
 const ModelCategory = require("../models/model.category")
 const ModelUserManga = require("../models/model.users_mangas")
 const ModelChapterPage = require("../models/model.chapters_pages")
-const ModelMangasChapters = require("../models/model.mangas_chapter")
+const ModelMangasChapters = require("../models/model.mangas_chapter");
+const {
+    match
+} = require('assert');
 
 
 
@@ -26,10 +29,10 @@ exports.index = async (req, res) => {
 
     const data = new Object();
     data.categories = await ModelCategory.findAll({
-        
+
     });
 
-    res.render('mangas/create',data)
+    res.render('mangas/create', data)
 }
 
 exports.mangas_add = async (req, res) => {
@@ -65,13 +68,46 @@ exports.mangas_add = async (req, res) => {
         score_total: 0,
         category_id: body.category_id,
 
-    }).then(()=> {
+    }).then(() => {
 
         res.redirect('/admin')
     })
 
 
 }
+
+exports.mangas_view = async (req, res) => {
+
+    const data = new Object()
+    data.mangas_chapters = await ModelMangasChapters.findAll({
+        where: {
+            manga_id: req.params.manga_id
+        },
+        include: [{
+            model: ModelMangas,
+
+
+        }, {
+            model: ModelChapter
+        }]
+    })
+
+    data.mangas = await ModelMangas.findOne({
+        where: {
+            manga_id: req.params.manga_id
+        },
+        include: [{
+            model: ModelCategory
+        }]
+    })
+
+
+    console.log(data.mangas_chapters)
+
+    res.render("mangas/view_mangas", data)
+
+}
+
 
 exports.chapter = async (req, res) => {
 
@@ -139,10 +175,10 @@ exports.chapter_all = async (req, res) => {
 
 
     const data = new Object();
-
+    const chaptersIds = new Array()
     data.mangas_chapters = await ModelMangasChapters.findAll({
-     
-        where:{
+
+        where: {
             manga_id: req.params.manga_id
         },
         include: [{
@@ -157,9 +193,30 @@ exports.chapter_all = async (req, res) => {
 
     });
 
-   console.log(data.mangas_chapters)
+    for (i = 0; i < data.mangas_chapters.length; i++) {
+        chaptersIds.push(data.mangas_chapters[i].chapter_id);
+    }
 
-   res.render('mangas/list_chapter',data)
+
+
+    data.chapter_pages = await ModelChapterPage.findAll({
+        where: {
+            chapter_id: chaptersIds
+        },
+        include: [{
+            model: ModelPage
+
+        }, {
+            model: ModelChapter
+        }]
+    })
+
+
+
+
+
+
+    res.render('mangas/list_chapter', data)
 
 }
 
@@ -167,19 +224,127 @@ exports.chapter_all = async (req, res) => {
 exports.pages = async (req, res) => {
 
 
-    console.log(req.params.chapter_id)
+    const chapter_id = req.params.chapter_id
 
     const data = new Object();
     data.chapter = await ModelChapter.findOne({
         where: {
-            chapter_id: req.params.chapter_id
+            chapter_id: chapter_id
         }
     });
 
-    res.render("mangas/list_chapter", data)
+    res.render("mangas/create_page", data)
 }
 
 exports.pages_add = async (req, res) => {
+    console.log(req.body)
 
-    
+    const chapter_id = req.body.chapter_id
+
+    await ModelMangasChapters.findOne({
+        where: {
+            chapter_id: chapter_id
+        },
+        include: [{
+            model: ModelMangas
+
+        }, {
+            model: ModelChapter
+        }]
+    }).then(async function (chapterFound) {
+
+        if (chapterFound) {
+            console.log(chapterFound)
+            // Créer un dossier si celui-ci n'existe pas
+            fs.mkdir('public/uploads/scans/' + chapterFound.manga.title + '/', {
+                recursive: true
+            }, (err) => {
+                if (err)
+                    throw err;
+            });
+
+
+            if (req.files) {
+
+                const file = req.files.scan;
+                for (let i = 0; i < file.length; i++) {
+
+                    await file[i].mv('public/uploads/scans/' + chapterFound.manga.title + '/' + file[i].name, err => {
+                        if (err)
+                            return res.status(500).send(err)
+                    });
+                    const scan = '/uploads/scans/' + chapterFound.manga.title + '/' + file[i].name
+
+
+                    console.log(scan)
+
+                    const regex = file[i].name.match(/[0-9]/igm)
+                    const numbre_page = regex[1]
+
+
+                    const page = await ModelPage.create({
+                        numbre_page: numbre_page,
+                        scan: scan,
+                    })
+
+
+                    console.log(page.page_id)
+
+                    await ModelChapterPage.create({
+                        chapter_id: chapter_id,
+                        page_id: page.page_id
+
+                    });
+
+
+                }
+                res.redirect(`/mangas/chapter/${chapterFound.manga_id}`);
+
+            }
+
+        }
+    })
+
+
+
+}
+
+exports.pages_all = async (req, res) => {
+
+    const data = new Object();
+
+
+    data.chapter_pages = await ModelChapterPage.findAll({
+        where: {
+            chapter_id: req.params.chapter_id
+        },
+        include: [{
+            model: ModelPage
+
+        }, {
+            model: ModelChapter
+        }]
+    })
+
+
+    data.mangas_chapters = await ModelMangasChapters.findOne({
+        where: {
+            chapter_id: req.params.chapter_id
+        },
+        include: [{
+            model: ModelMangas
+
+        }, {
+            model: ModelChapter
+        }]
+    })
+
+
+
+
+
+
+
+    res.render('mangas/list_pages', data)
+
 }

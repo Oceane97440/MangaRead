@@ -1,0 +1,29 @@
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Numéros de la page</th>
+            <th>Scan</th>
+            <th>Ajouter des pages au chapitre</th>
+
+
+
+        </tr>
+    </thead>
+    <tbody>
+        <% for (let i=0; i < chapter_pages.length; i++) { %>
+        <tr>
+
+            <td><%= chapter_pages[i].page.numbre_page %></td>
+            <td><a href="<%= chapter_pages[i].page.scan %>"><img src="<%= chapter_pages[i].page.scan %>" alt="" style="width: 20%;"></a>
+            </td>
+            <td><a href="/mangas/pages/create/<%= chapter_pages[i].chapter.chapter_id %>">Ajouter une pages</a></td>
+            <td><a href="/mangas/chapter/<%= mangas_chapters.manga.manga_id %>">Voir tous les chapitres</a></td>
+
+
+
+        </tr>
+        <% } %>
+
+    </tbody>
+</table>

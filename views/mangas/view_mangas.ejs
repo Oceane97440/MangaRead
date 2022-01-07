@@ -1,0 +1,26 @@
+<h1><%=mangas.title %></h1>
+<hr>
+
+<img src="<%=mangas.cover %>" alt="">
+<ul>
+    <li>Status:<%=mangas.status %></li>
+    <li>Auteur(s):<%=mangas.author %></li>
+    <li>Date de sortie:<%=mangas.date %></li>
+    <li>Categorie:<%=mangas.category.label %></li>
+    <li>Synopsis:<%=mangas.description %></li>
+
+</ul>
+
+
+
+
+
+<h2>Liste des chapitre</h2>
+<hr>
+<ul>        
+    <% for (let i=0; i < mangas_chapters.length; i++) { %>
+
+    <li><%=mangas_chapters[i].chapter.title %></li>
+    <% } %>
+
+</ul>
