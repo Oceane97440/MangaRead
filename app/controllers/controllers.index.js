@@ -240,6 +240,13 @@ exports.favoris = async (req, res) => {
     res.render('users/favoris')
 }
 
+
+exports.favoris_add = async (req, res) => {
+
+    console.log(req.session.user)
+    console.log(req.body)
+}
+
 exports.admin = async (req, res) => {
 
     const data = new Object();
@@ -249,7 +256,17 @@ exports.admin = async (req, res) => {
         }]
     });
 
+    data.mangas_chapter = await ModelMangasChapters.findAll({
+        include: [{
+            model: ModelChapter
+        }]
+    })
    
 
     res.render('admin/dashboard',data)
+}
+
+exports.vote = async (req, res) => {
+    console.log(req.session.user)
+   console.log(req.body)
 }

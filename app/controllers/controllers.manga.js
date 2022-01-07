@@ -5,6 +5,7 @@ const {
 const validator = require('validator');
 const fs = require('fs');
 const Utilities = require('../functions/functions.utilities');
+const paginate = require('express-paginate');
 
 
 const ModelUser = require("../models/model.users")
@@ -346,5 +347,28 @@ exports.pages_all = async (req, res) => {
 
 
     res.render('mangas/list_pages', data)
+
+}
+
+exports.read = async (req, res) => {
+
+    ModelChapterPage.findAndCountAll({
+            where: {
+                chapter_id: req.params.chapter_id
+            },
+            limit: req.query.limit,
+            offset: req.skip
+        })
+        .then(results => {
+            console.log(results)
+            const itemCount = results.count;
+            const pageCount = Math.ceil(results.count / req.query.limit);
+            res.render('mangas/read', {
+                users: results.rows,
+                pageCount,
+                itemCount,
+                pages: paginate.getArrayPages(req)(3, pageCount, req.query.page)
+            });
+        })
 
 }

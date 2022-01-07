@@ -1,7 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <style>
+        .rating-header {
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
+    </style>
+    <title>Document</title>
+</head>
+
+<input>
+
+
 <h1><%=mangas.title %></h1>
 <hr>
 
-<img src="<%=mangas.cover %>" alt="">
+<img src="<%=mangas.cover %>" alt="" width="20%">
 <ul>
     <li>Status:<%=mangas.status %></li>
     <li>Auteur(s):<%=mangas.author %></li>
@@ -11,16 +34,156 @@
 
 </ul>
 
+<div>
+    <input type="checkbox" id="like" style="
+    position: relative;
+    left: 33px;
+    cursor: pointer;
+    opacity: 0;
+">
+    </input>
+    <img src="/admin/img/nolike.png" width="4%" id="img_like" alt="">
+</div>
 
 
 
+
+<div class="form-group" id="rating-ability-wrapper">
+    <label class="control-label" for="rating">
+
+        <span class="field-label-info"></span>
+        <input type="hidden" id="selected_rating" name="selected_rating" value="" required="required">
+    </label>
+    <h2 class="bold rating-header">
+        <span class="selected-rating">0</span><small> / 5</small>
+    </h2>
+    <button type="button" class="btnrating btn btn-default btn-sm" data-attr="1" id="rating-star-1">
+        <i class="fa fa-star" aria-hidden="true"></i>
+    </button>
+    <button type="button" class="btnrating btn btn-default btn-sm" data-attr="2" id="rating-star-2">
+        <i class="fa fa-star" aria-hidden="true"></i>
+    </button>
+    <button type="button" class="btnrating btn btn-default btn-sm" data-attr="3" id="rating-star-3">
+        <i class="fa fa-star" aria-hidden="true"></i>
+    </button>
+    <button type="button" class="btnrating btn btn-default btn-sm" data-attr="4" id="rating-star-4">
+        <i class="fa fa-star" aria-hidden="true"></i>
+    </button>
+    <button type="button" class="btnrating btn btn-default btn-sm" data-attr="5" id="rating-star-5">
+        <i class="fa fa-star" aria-hidden="true"></i>
+    </button>
+</div>
 
 <h2>Liste des chapitre</h2>
 <hr>
-<ul>        
+<ul>
     <% for (let i=0; i < mangas_chapters.length; i++) { %>
 
-    <li><%=mangas_chapters[i].chapter.title %></li>
+    <li><a href="/mangas/read/<%=mangas_chapters[i].chapter.chapter_id %>"><%=mangas_chapters[i].chapter.title %></a>
+    </li>
     <% } %>
 
 </ul>
+
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function ($) {
+
+        $(".btnrating").on('click', (function (e) {
+
+            var previous_value = $("#selected_rating").val();
+
+            var selected_value = $(this).attr("data-attr");
+            $("#selected_rating").val(selected_value);
+
+            $(".selected-rating").empty();
+            $(".selected-rating").html(selected_value);
+
+            console.log(selected_value)
+
+            let req = new XMLHttpRequest();
+            let url = "http://127.0.0.1:8890/vote";
+
+            method = "POST";
+            data = data = {
+                vote: selected_value,
+
+            }
+            // console.log(data)
+
+            //envoie requête format json
+            dataSend = JSON.stringify(data);
+            req.open(method, url);
+            req.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+            req.responseType = "json";
+            req.send(dataSend);
+
+            for (i = 1; i <= selected_value; ++i) {
+                $("#rating-star-" + i).toggleClass('btn-warning');
+                $("#rating-star-" + i).toggleClass('btn-default');
+            }
+
+            for (ix = 1; ix <= previous_value; ++ix) {
+                $("#rating-star-" + ix).toggleClass('btn-warning');
+                $("#rating-star-" + ix).toggleClass('btn-default');
+            }
+
+        }));
+
+
+
+        $("#like").on('click', (function (e) {
+
+            var checkBox = document.getElementById("like");
+
+            // If the checkbox is checked, display the output text
+            if (checkBox.checked == true) {
+                $('#img_like').attr('src', "/admin/img/like.png");
+
+                let req = new XMLHttpRequest();
+                let url = "http://127.0.0.1:8890/favoris";
+
+                method = "POST";
+                data = data = {
+                    favoris: checkBox.checked,
+
+                }
+                // console.log(data)
+
+                //envoie requête format json
+                dataSend = JSON.stringify(data);
+                req.open(method, url);
+                req.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+                req.responseType = "json";
+                req.send(dataSend);
+
+
+            } else {
+
+
+                $('#img_like').attr('src', "/admin/img/nolike.png");
+                let req = new XMLHttpRequest();
+                let url = "http://127.0.0.1:8890/favoris";
+
+                method = "POST";
+                data = data = {
+                    favoris: false,
+
+                }
+                // console.log(data)
+
+                //envoie requête format json
+                dataSend = JSON.stringify(data);
+                req.open(method, url);
+                req.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+                req.responseType = "json";
+                req.send(dataSend);
+            }
+        }))
+
+    });
+</script>
+</body>
+
+</html>

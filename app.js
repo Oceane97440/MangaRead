@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session')
 const fileUpload = require('express-fileupload');
+const paginate = require('express-paginate');
+
 const database = require('./app/config/database');
 
 // Import des models 
@@ -129,6 +131,7 @@ app.use(express.urlencoded({
   extended: false
 }));
 app.use(fileUpload());
+app.use(paginate.middleware(10, 50));
 app.use(express.static(__dirname + '/public'));
 app.use(express.static('files'));
 app.use(cors());

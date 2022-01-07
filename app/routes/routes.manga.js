@@ -11,7 +11,10 @@ router.post("/chapter/create", mangas.chapter_add);
 router.get("/chapter/:manga_id", mangas.chapter_all);
 router.get("/pages/create/:chapter_id", mangas.pages);
 router.post("/pages/create", mangas.pages_add);
+router.get("/pages/:chapter_id", mangas.pages_all);
 router.get("/fiche/:manga_id", mangas.mangas_view);
+router.get("/read/:chapter_id", mangas.read);
+
 
 
 
