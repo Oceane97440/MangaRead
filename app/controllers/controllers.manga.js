@@ -350,25 +350,52 @@ exports.pages_all = async (req, res) => {
 
 }
 
-exports.read = async (req, res) => {
+// exports.read = async (req, res) => {
 
+//     const data = new Array()
+
+//     data.pages = ModelChapterPage.findAll({
+//             where: {
+//                 chapter_id: req.params.chapter_id
+//             },
+//            include:[{
+//                model: ModelChapter
+//            },{
+//                model:ModelPage
+//            }]
+//         })
+    
+//         res.render('mangas/read',data)
+
+
+// }
+
+exports.pagination = async (req, res) => {
+
+    const chapter_id = req.params.chapter_id
     ModelChapterPage.findAndCountAll({
-            where: {
-                chapter_id: req.params.chapter_id
-            },
-            limit: req.query.limit,
-            offset: req.skip
-        })
-        .then(results => {
-            console.log(results)
-            const itemCount = results.count;
-            const pageCount = Math.ceil(results.count / req.query.limit);
-            res.render('mangas/read', {
-                users: results.rows,
-                pageCount,
-                itemCount,
-                pages: paginate.getArrayPages(req)(3, pageCount, req.query.page)
-            });
-        })
+        // where: {
+        //     chapter_id: chapter_id
+        // },
+       include:[{
+           model: ModelChapter
+       },{
+           model:ModelPage
+       }],
+        limit: 1,
+        offset: req.skip
+    })
+    .then(results => {
+        console.log(results.rows)
+        const itemCount = results.count;
+        const pageCount = Math.ceil(results.count / req.query.limit);
+        res.render('mangas/read', {
+            chapters_pages: results.rows,
+            pageCount,
+            itemCount,
+            pages: paginate.getArrayPages(req)(3, pageCount, req.query.page),
+            chapter_id:chapter_id
+        });
+    })
 
 }

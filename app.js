@@ -131,7 +131,7 @@ app.use(express.urlencoded({
   extended: false
 }));
 app.use(fileUpload());
-app.use(paginate.middleware(10, 50));
+app.use(paginate.middleware(1, 50));
 app.use(express.static(__dirname + '/public'));
 app.use(express.static('files'));
 app.use(cors());

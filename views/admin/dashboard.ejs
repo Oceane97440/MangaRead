@@ -45,10 +45,9 @@
                         <td><a href="/mangas/fiche/<%= mangas[i].manga_id %>"><img src="<%= mangas[i].cover %>" width="30%" alt=""></a></td>
                         <td><%= mangas[i].category.label %></td>
                         <td><a href="/mangas/chapter/create/<%= mangas[i].manga_id %>">Ajouter un chapitre</a></td>
-                        <% if (mangas_chapter.chapter) { %>
-
                         <td><a href="/mangas/chapter/<%= mangas[i].manga_id %>">Voir les chapitre</a></td>
-                        <% } %>
+                        
+
 
 
                     </tr>
