@@ -40,11 +40,14 @@
 
          <div class="text-center">
             <nav aria-label="Page navigation example" style="display: inline-block;">
-               <ul class="pagination ">
-                  <%for(let i =1; i <= pageCount;  i++ ) {  %>
-                  <li class="page-item active"><a class="page-link" href="/mangas/page?page=<%=i%>"><%=i%></a></li>
-                  <% } %>
-               </ul>
+                  <ul class="pagination">
+                    <li class="page-item"><a class="page-link" href="/mangas/page/<%=preview%>">Previous</a></li>
+                    <%for(let i =1; i <= pageCount;  i++ ) {  %>
+                     <li class="page-item active"><a class="page-link" href="/mangas/page/<%=chapter_id%>/?page=<%=i%>"><%=i%></a></li>
+                     <% } %>
+                    <li class="page-item"><a class="page-link" href="/mangas/page/<%=next%>">Next</a></li>
+                  </ul>
+         
             </nav>
          </div>
 

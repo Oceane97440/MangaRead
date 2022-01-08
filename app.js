@@ -111,7 +111,11 @@ mangas.belongsTo(category, {
 });
 
 
-
+chapter.belongsTo(mangas, {
+  foreignKey: 'manga_id',
+  onDelete: 'cascade',
+  hooks: true
+});
 
 
 database

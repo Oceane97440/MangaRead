@@ -146,6 +146,7 @@ exports.chapter_add = async (req, res) => {
         if (mangaFound) {
             const chapter = await ModelChapter.create({
                 title: body.title,
+                manga_id : body.manga_id
             });
 
 
@@ -364,7 +365,7 @@ exports.pages_all = async (req, res) => {
 //                model:ModelPage
 //            }]
 //         })
-    
+
 //         res.render('mangas/read',data)
 
 
@@ -374,28 +375,51 @@ exports.pagination = async (req, res) => {
 
     const chapter_id = req.params.chapter_id
     ModelChapterPage.findAndCountAll({
-        // where: {
-        //     chapter_id: chapter_id
-        // },
-       include:[{
-           model: ModelChapter
-       },{
-           model:ModelPage
-       }],
-        limit: 1,
-        offset: req.skip
-    })
-    .then(results => {
-        console.log(results.rows)
-        const itemCount = results.count;
-        const pageCount = Math.ceil(results.count / req.query.limit);
-        res.render('mangas/read', {
-            chapters_pages: results.rows,
-            pageCount,
-            itemCount,
-            pages: paginate.getArrayPages(req)(3, pageCount, req.query.page),
-            chapter_id:chapter_id
-        });
-    })
+            where: {
+                chapter_id: chapter_id
+            },
+            include: [{
+                model: ModelChapter
+            }, {
+                model: ModelPage
+            }],
+            limit: 1,
+            offset: req.skip
+        })
+        .then(async function (results) {
+            
+        
+            console.log(results.rows)
+            const itemCount = results.count;
+            const pageCount = Math.ceil(results.count / req.query.limit);
+            // var next = await ModelChapterPage.max('chapter_id', {
+            //     where: {
+            //         chapter_id: {
+            //             [Op.notIn]: [chapter_id]
+            //         }
+            //     }
+            // });
+  
+            // var preview = await ModelChapterPage.min('chapter_id',{
+            //     where: {
+            //         chapter_id: {
+            //             [Op.notIn]: [chapter_id]
+            //         }
+            //     }
+
+            // })
+            const next = (parseInt(chapter_id)  + 1)
+            const preview = (parseInt(chapter_id) - 1)
+            res.render('mangas/read', {
+                chapters_pages: results.rows,
+                pageCount,
+                itemCount,
+                pages: paginate.getArrayPages(req)(3, pageCount, req.query.page),
+                chapter_id: chapter_id,
+                next:next,
+               preview:preview
+
+            });
+        })
 
 }

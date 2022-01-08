@@ -12,6 +12,10 @@ const Chapters = sequelize.define('chapters', {
     title: {
         type: Sequelize.STRING(),
         allowNull: false
+    },
+    manga_id: {
+        type: Sequelize.INTEGER(),
+        allowNull: false
     }
 }, {
     tableName: 'chapters',
