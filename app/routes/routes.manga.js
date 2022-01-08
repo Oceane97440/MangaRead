@@ -17,7 +17,7 @@ router.get("/fiche/:manga_id", mangas.mangas_view);
 
 
 
-router.get('/page/:chapter_id',mangas.pagination);
+router.get('/:manga_id/page/:chapter_id',mangas.pagination);
 
 
 

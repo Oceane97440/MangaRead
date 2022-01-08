@@ -77,7 +77,7 @@
 <ul>
     <% for (let i=0; i < mangas_chapters.length; i++) { %>
 
-    <li><a href="/mangas/page/<%=mangas_chapters[i].chapter.chapter_id %>"><%=mangas_chapters[i].chapter.title %></a>
+    <li><a href="/mangas/<%=mangas_chapters[i].chapter.manga_id %>/page/<%=mangas_chapters[i].chapter.chapter_id %>"><%=mangas_chapters[i].chapter.title %></a>
     </li>
     <% } %>
 
