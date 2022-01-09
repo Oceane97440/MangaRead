@@ -23,7 +23,7 @@ const ChaptersPages = sequelize.define('users_mangas', {
         defaultValue: 0
 
     },
-    favori: {
+    favoris: {
         type: Sequelize.TINYINT(),
         allowNull: false,
         defaultValue: 0

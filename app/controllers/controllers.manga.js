@@ -21,11 +21,28 @@ const {
 } = require('assert');
 
 
+exports.index = async (req, res) => {
 
+
+    const data = new Object();
+    data.mangas = await ModelMangas.findAll({
+        include: [{
+            model: ModelCategory
+        }]
+    });
+
+    data.mangas_chapter = await ModelMangasChapters.findAll({
+        include: [{
+            model: ModelChapter
+        }]
+    })
+
+    res.render('mangas/list_mangas', data)
+}
 
 
 /**Page d'ajout d'un manga */
-exports.index = async (req, res) => {
+exports.mangas = async (req, res) => {
 
 
     const data = new Object();
@@ -78,6 +95,7 @@ exports.mangas_add = async (req, res) => {
 }
 
 exports.mangas_view = async (req, res) => {
+    console.log(req.session.user)
 
     const data = new Object()
     data.mangas_chapters = await ModelMangasChapters.findAll({
@@ -102,8 +120,15 @@ exports.mangas_view = async (req, res) => {
         }]
     })
 
+    data.mangas_user = await ModelUserManga.findOne({
+        where: {
+            manga_id: req.params.manga_id,
+            user_id: req.session.user.user_id
+        }
+    })
 
-    console.log(data.mangas_chapters)
+
+    console.log(data.mangas_user)
 
     res.render("mangas/view_mangas", data)
 
@@ -351,27 +376,8 @@ exports.pages_all = async (req, res) => {
 
 }
 
-// exports.read = async (req, res) => {
 
-//     const data = new Array()
-
-//     data.pages = ModelChapterPage.findAll({
-//             where: {
-//                 chapter_id: req.params.chapter_id
-//             },
-//            include:[{
-//                model: ModelChapter
-//            },{
-//                model:ModelPage
-//            }]
-//         })
-
-//         res.render('mangas/read',data)
-
-
-// }
-
-exports.pagination = async (req, res) => {
+exports.read = async (req, res) => {
 
     const chapter_id = req.params.chapter_id
     const manga_id = req.params.manga_id
@@ -425,8 +431,8 @@ exports.pagination = async (req, res) => {
 
 
             })
-            console.log(chapter_id)
-            console.log(preview)
+            // console.log(chapter_id)
+            // console.log(preview)
 
             if (next <= chapter_id) {
                 next = chapter_id

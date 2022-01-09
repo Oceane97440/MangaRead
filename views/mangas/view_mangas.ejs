@@ -39,7 +39,7 @@
     left: 33px;
     cursor: pointer;
     opacity: 0;
-">
+" value="0">
     <img src="/admin/img/nolike.png" width="4%" id="img_like" alt="">
 </div>
 
@@ -77,7 +77,8 @@
 <ul>
     <% for (let i=0; i < mangas_chapters.length; i++) { %>
 
-    <li><a href="/mangas/<%=mangas_chapters[i].chapter.manga_id %>/page/<%=mangas_chapters[i].chapter.chapter_id %>"><%=mangas_chapters[i].chapter.title %></a>
+    <li><a
+            href="/mangas/<%=mangas_chapters[i].chapter.manga_id %>/page/<%=mangas_chapters[i].chapter.chapter_id %>"><%=mangas_chapters[i].chapter.title %></a>
     </li>
     <% } %>
 
@@ -87,6 +88,24 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
     $(document).ready(function ($) {
+
+
+
+        <%if (mangas_user) { %>
+        <%if (mangas_user.favoris === 1) { %>
+            document.getElementById("like").value = 1;
+
+            $('#img_like').attr('src', "/admin/img/like.png");
+
+           
+            
+         <%}else{ %>
+            document.getElementById("like").value = 0;
+
+            $('#img_like').attr('src', "/admin/img/nolike.png");
+        <%}%>
+        <%}%>
+
 
         $(".btnrating").on('click', (function (e) {
 
@@ -106,6 +125,7 @@
             method = "POST";
             data = data = {
                 vote: selected_value,
+                manga_id: '<%=mangas.manga_id %>'
 
             }
             // console.log(data)
@@ -134,50 +154,57 @@
         $("#like").on('click', (function (e) {
 
             var checkBox = document.getElementById("like");
-
+            var isFavoris = document.getElementById("like").value
             // If the checkbox is checked, display the output text
-            if (checkBox.checked == true) {
-                $('#img_like').attr('src', "/admin/img/like.png");
+                if (checkBox.checked == true && isFavoris != 1) {
+                    document.getElementById("like").value = 1;
 
-                let req = new XMLHttpRequest();
-                let url = "http://127.0.0.1:8890/favoris";
+                    $('#img_like').attr('src', "/admin/img/like.png");
 
-                method = "POST";
-                data = data = {
-                    favoris: checkBox.checked,
+                    let req = new XMLHttpRequest();
+                    let url = "http://127.0.0.1:8890/favoris";
 
+                    method = "POST";
+                    data = data = {
+                        favoris: true,
+                        manga_id: '<%=mangas.manga_id %>'
+
+                    }
+                    // console.log(data)
+
+                    //envoie requête format json
+                    dataSend = JSON.stringify(data);
+                    req.open(method, url);
+                    req.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+                    req.responseType = "json";
+                    req.send(dataSend);
+
+
+                } else {
+
+                    document.getElementById("like").value = 0;
+
+                    $('#img_like').attr('src', "/admin/img/nolike.png");
+                    let req = new XMLHttpRequest();
+                    let url = "http://127.0.0.1:8890/favoris";
+
+                    method = "POST";
+                    data = data = {
+                        favoris: false,
+                        manga_id: '<%=mangas.manga_id %>'
+
+                    }
+                    // console.log(data)
+
+                    //envoie requête format json
+                    dataSend = JSON.stringify(data);
+                    req.open(method, url);
+                    req.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+                    req.responseType = "json";
+                    req.send(dataSend);
                 }
-                // console.log(data)
+            
 
-                //envoie requête format json
-                dataSend = JSON.stringify(data);
-                req.open(method, url);
-                req.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-                req.responseType = "json";
-                req.send(dataSend);
-
-
-            } else {
-
-
-                $('#img_like').attr('src', "/admin/img/nolike.png");
-                let req = new XMLHttpRequest();
-                let url = "http://127.0.0.1:8890/favoris";
-
-                method = "POST";
-                data = data = {
-                    favoris: false,
-
-                }
-                // console.log(data)
-
-                //envoie requête format json
-                dataSend = JSON.stringify(data);
-                req.open(method, url);
-                req.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-                req.responseType = "json";
-                req.send(dataSend);
-            }
         }))
 
     });

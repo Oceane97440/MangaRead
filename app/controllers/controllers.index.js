@@ -192,7 +192,7 @@ exports.login_add = async (req, res) => {
                         // use session for user connected
                         req.session.user = user;
 
-                       // console.log(req.session)
+                        // console.log(req.session)
 
                         if (req.session.user.role === 1) {
 
@@ -200,7 +200,7 @@ exports.login_add = async (req, res) => {
                             res.redirect("/admin")
 
                         } else {
-                            res.redirect('/favoris');
+                            res.redirect('/list/favoris');
 
                         }
 
@@ -233,11 +233,32 @@ exports.login_add = async (req, res) => {
 
 }
 
+exports.logout = async (req, res) => {
+
+    req.session = null
+    res.redirect('/login')
+}
 
 exports.favoris = async (req, res) => {
 
+    const data = new Object()
 
-    res.render('users/favoris')
+    data.list_favorie = await ModelUserManga.findAll({
+        where: {
+            favoris: true
+        },
+        include: [{
+                model: ModelMangas
+            },
+            {
+                model: ModelUser
+            }
+        ]
+    })
+
+    console.log(data.list_favorie)
+
+    res.render('users/favoris', data)
 }
 
 
@@ -245,6 +266,36 @@ exports.favoris_add = async (req, res) => {
 
     console.log(req.session.user)
     console.log(req.body)
+
+    const data = new Object()
+    await ModelUserManga.findOne({
+        where: {
+            user_id: req.session.user.user_id,
+            manga_id: req.body.manga_id,
+
+        }
+    }).then(async function (usermangaFound) {
+
+        if (usermangaFound) {
+
+            await ModelUserManga.update({
+                favoris: req.body.favoris
+            }, {
+                where: {
+                    user_manga_id: usermangaFound.user_manga_id
+                }
+            });
+        } else {
+            await ModelUserManga.create({
+
+                user_id: req.session.user.user_id,
+                manga_id: req.body.manga_id,
+                favoris: req.body.favoris
+            })
+        }
+    })
+
+
 }
 
 exports.admin = async (req, res) => {
@@ -261,12 +312,44 @@ exports.admin = async (req, res) => {
             model: ModelChapter
         }]
     })
-   
 
-    res.render('admin/dashboard',data)
+
+    res.render('admin/dashboard', data)
 }
 
 exports.vote = async (req, res) => {
     console.log(req.session.user)
-   console.log(req.body)
+    console.log(req.body)
+
+    await ModelUserManga.findOne({
+        where: {
+            user_id: req.session.user.user_id,
+            manga_id: req.body.manga_id,
+
+        }
+    }).then(async function (usermangaFound) {
+
+        if (usermangaFound) {
+            await ModelUserManga.update({
+                score: req.body.vote,
+            }, {
+                where: {
+                    user_manga_id: usermangaFound.user_manga_id
+                }
+            });
+
+
+        } else {
+            await ModelUserManga.create({
+
+                user_id: req.session.user.user_id,
+                manga_id: req.body.manga_id,
+                score: req.body.vote,
+
+            })
+        }
+
+    })
+
+
 }
