@@ -53,7 +53,14 @@
         <input type="hidden" id="selected_rating" name="selected_rating" value="" required="required">
     </label>
     <h2 class="bold rating-header">
+        <%if (locals.user) {%>
+        <%if (mangas_user) { %>
+        <span class="selected-rating"><%=mangas_user.score%></span><small> / 5</small>
+        <%}%>
+        <%}else{%>
         <span class="selected-rating">0</span><small> / 5</small>
+
+        <%}%>
     </h2>
     <button type="button" class="btnrating btn btn-default btn-sm" data-attr="1" id="rating-star-1">
         <i class="fa fa-star" aria-hidden="true"></i>
