@@ -37,6 +37,38 @@ exports.index = async (req, res) => {
         }]
     })
 
+
+    data.shonen = await ModelMangas.findAll({
+        where: {
+            category_id: 1
+        }
+    });
+    data.shojo = await ModelMangas.findAll({
+        where: {
+            category_id: 2
+        }
+    });
+
+
+    data.seinen = await ModelMangas.findAll({
+        where: {
+            category_id: 3
+        }
+    });
+
+    data.yaoi = await ModelMangas.findAll({
+        where: {
+            category_id: 4
+        }
+    });
+    data.yuri = await ModelMangas.findAll({
+        where: {
+            category_id: 5
+        }
+    });
+
+    data.utilities = Utilities
+
     res.render('mangas/list_mangas', data)
 }
 
@@ -127,10 +159,60 @@ exports.mangas_view = async (req, res) => {
         }
     })
 
+    var score = await ModelUserManga.sum('score', {
+        where: {
+            manga_id: req.params.manga_id,
+        }
+    })
 
-    console.log(data.mangas_user)
+    const score_total = (score / 5)
+
+    await ModelMangas.update({
+        score_total: score_total,
+    }, {
+        where: {
+            manga_id: req.params.manga_id,
+        }
+    });
+
+    var total = await ModelUserManga.findAll({
+        attributes: ['score'],
+        where: {
+            manga_id: req.params.manga_id,
+        }
+    });
+
+    data.total_vote = total.length
+    data.score_total = score_total
+
+    console.log(score_total)
 
     res.render("mangas/view_mangas", data)
+
+}
+
+exports.categorie = async (req, res) => {
+
+    const data = new Object()
+
+    data.mangas = await ModelMangas.findAll({
+        where: {
+            category_id: req.params.category_id
+        },
+        include: [{
+            model: ModelCategory
+        }]
+    });
+
+    data.mangas_chapter = await ModelMangasChapters.findAll({
+        include: [{
+            model: ModelChapter
+        }]
+    })
+
+
+    res.render("mangas/list_category", data)
+
 
 }
 
@@ -413,7 +495,7 @@ exports.read = async (req, res) => {
                     chapter_id: {
                         [Op.notIn]: [chapter_id],
                     },
-                    manga_id:manga_id
+                    manga_id: manga_id
                 }
 
 
@@ -426,7 +508,7 @@ exports.read = async (req, res) => {
                     chapter_id: {
                         [Op.notIn]: [chapter_id],
                     },
-                    manga_id:manga_id
+                    manga_id: manga_id
                 }
 
 
@@ -436,11 +518,11 @@ exports.read = async (req, res) => {
 
             if (next <= chapter_id) {
                 next = chapter_id
-            }else{
-                next =(parseInt(chapter_id)+1)
+            } else {
+                next = (parseInt(chapter_id) + 1)
             }
-            if (  preview>=chapter_id) {
-                preview = (parseInt(chapter_id)-1)
+            if (preview >= chapter_id) {
+                preview = (parseInt(chapter_id) - 1)
             }
 
             res.render('mangas/read', {

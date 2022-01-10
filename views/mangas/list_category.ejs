@@ -1,0 +1,11 @@
+<h1><%= mangas[0].category.label %></h1>
+<% for (let i=0; i < mangas.length; i++) { %>
+
+    <ul>
+        <li><%= mangas[i].title %></li>
+        <li><a href="/mangas/fiche/<%= mangas[i].manga_id %>"><img src="<%= mangas[i].cover %>" width="30%" alt=""></a></li>
+        
+    </ul>
+
+
+    <% } %>

@@ -9,7 +9,7 @@
     <link href="/admin/css/style.css" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/4d66efb478.js"></script>
 
-    <title>Dashboard</title>
+    <title>Liste des Mangas</title>
 </head>
 
 <body>
@@ -21,6 +21,43 @@
         <ul>
 
             <li><a href="/mangas/create">Ajouter une mangas</a></li>
+        </ul>
+        <ul>
+
+            <%if (!utilities.empty(shonen)) { %>
+            <li><a href="/mangas/categorie/<%=shonen[0].category_id%>">
+                    Shônen
+                    <span><%=Object(shonen).length%></span></a>
+            </li>
+            <%}%>
+            <% if(!utilities.empty(shojo)) { %>
+
+            <li><a href="/mangas/categorie/<%=shojo[0].category_id%>"> Shôjo
+                    <span><%=Object(shojo).length%></span></a>
+
+            </li>
+            <% } %>
+            <% if(!utilities.empty(seinen)) { %>
+            <li><a href="/mangas/categorie/<%=seinen[0].category_id%>">Seinen
+                    <span><%=Object(seinen).length%></span></a>
+
+            </li>
+            <% } %>
+            <% if(!utilities.empty(yaoi)) { %>
+
+            <li><a href="/mangas/categorie/<%=yaoi[0].category_id%>"> Yaoi
+                    <span><%=Object(yaoi).length%></span></a>
+
+            </li>
+            <% } %>
+            <% if(!utilities.empty(yuri)) { %>
+
+            <li><a href="/mangas/categorie/<%=yuri[0].category_id%>">Yuri
+                    <span><%=Object(yuri).length%></span></a>
+
+            </li>
+            <% } %>
+
         </ul>
         <div class="row">
 
@@ -42,10 +79,14 @@
                     <tr>
 
                         <td><%= mangas[i].title %></td>
-                        <td><a href="/mangas/fiche/<%= mangas[i].manga_id %>"><img src="<%= mangas[i].cover %>" width="30%" alt=""></a></td>
-                        <td><%= mangas[i].category.label %></td>
-                        <td><a href="/mangas/<%= mangas[i].manga_id %>/page/<%= mangas_chapter[i].chapter.chapter_id %>">Lire</a></td>
-                        
+                        <td><a href="/mangas/fiche/<%= mangas[i].manga_id %>"><img src="<%= mangas[i].cover %>"
+                                    width="30%" alt=""></a></td>
+                        <td><a href="/mangas/categorie/<%= mangas[i].category_id %>"><%= mangas[i].category.label %></a>
+                        </td>
+                        <td><a
+                                href="/mangas/<%= mangas[i].manga_id %>/page/<%= mangas_chapter[i].chapter.chapter_id %>">Lire</a>
+                        </td>
+
 
 
 
@@ -55,8 +96,8 @@
                 </tbody>
             </table>
         </div>
-    
-    
+
+
 
     </div>
 

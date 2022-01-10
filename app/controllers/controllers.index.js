@@ -233,6 +233,23 @@ exports.login_add = async (req, res) => {
 
 }
 
+exports.profil = async (req, res) => {
+
+    const data = new Object()
+    data.user = await ModelUserManga.findOne({
+        where: {
+            user_id: req.session.user.user_id
+        },
+        include: [{
+            model: ModelUser
+        }, {
+            model: ModelMangas
+        }]
+    })
+
+    res.render('users/profil', data)
+}
+
 exports.logout = async (req, res) => {
 
     req.session = null
@@ -321,6 +338,8 @@ exports.vote = async (req, res) => {
     console.log(req.session.user)
     console.log(req.body)
 
+  
+
     await ModelUserManga.findOne({
         where: {
             user_id: req.session.user.user_id,
@@ -337,6 +356,8 @@ exports.vote = async (req, res) => {
                     user_manga_id: usermangaFound.user_manga_id
                 }
             });
+
+        
 
 
         } else {

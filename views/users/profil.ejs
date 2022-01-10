@@ -1,0 +1,12 @@
+<h1>Profil de <%=user.user.username%></h1>
+
+<img src="<%=user.user.image%>" alt="" width="10%">
+<ul>
+    <li>Email : <%=user.user.email%></li>
+    <li>Role : <% if(user.user.role === 1){%>
+        Administrateur
+        <%}else{%>
+            Lecteur
+        <%} %>
+    </li>
+</ul>
