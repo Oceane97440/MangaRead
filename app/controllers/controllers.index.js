@@ -333,12 +333,37 @@ exports.admin = async (req, res) => {
 
     res.render('admin/dashboard', data)
 }
+exports.delete = async (req, res) => {
+
+    const manga_id = req.params.manga_id
+    console.log(manga_id)
+
+    await ModelMangas.findOne({
+        where: {
+            manga_id: manga_id,
+
+        }
+    }).then(async function (mangaFound) {
+
+        if (mangaFound) {
+
+            await ModelMangas.destroy({
+                where: {
+                    manga_id:manga_id
+                }
+            });
+
+            res.redirect('/admin')
+        } 
+    })
+
+}
 
 exports.vote = async (req, res) => {
     console.log(req.session.user)
     console.log(req.body)
 
-  
+
 
     await ModelUserManga.findOne({
         where: {
@@ -357,7 +382,7 @@ exports.vote = async (req, res) => {
                 }
             });
 
-        
+
 
 
         } else {
