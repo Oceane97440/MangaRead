@@ -127,7 +127,6 @@ exports.mangas_add = async (req, res) => {
 }
 
 exports.mangas_view = async (req, res) => {
-    console.log(req.session.user)
 
     const data = new Object()
     data.mangas_chapters = await ModelMangasChapters.findAll({
@@ -152,12 +151,17 @@ exports.mangas_view = async (req, res) => {
         }]
     })
 
-    data.mangas_user = await ModelUserManga.findOne({
-        where: {
-            manga_id: req.params.manga_id,
-            user_id: req.session.user.user_id
-        }
-    })
+
+    //si l'utilisateur est co on affichier les donnée lier au user pour le manga
+    if (!Utilities.empty(req.session.user)) {
+        data.mangas_user = await ModelUserManga.findOne({
+            where: {
+                manga_id: req.params.manga_id,
+                user_id: req.session.user.user_id
+            }
+        })
+
+    }
 
     var score = await ModelUserManga.sum('score', {
         where: {
@@ -184,6 +188,7 @@ exports.mangas_view = async (req, res) => {
 
     data.total_vote = total.length
     data.score_total = score_total
+    data.utilities = Utilities
 
     console.log(score_total)
 

@@ -1,1 +1,81 @@
-<h1>HP</h1>
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>jQuery UI Autocomplete - Default functionality</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    <style>
+        div.ui-helper-hidden-accessible{
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+
+
+
+    Search our models: <input type="text" name="search" id="search">
+
+
+
+    <script>
+        $(document).ready(function ($) {
+
+            $('#search').autocomplete({
+                source: function (req, res) {
+                    $.ajax({
+                        url: "autocomplete/",
+                        dataType: "jsonp",
+                        type: "GET",
+                        data: req,
+
+                        success: function (data) {
+                            console.log(data)
+
+
+                            res($.map(data, function (item) {
+
+
+                                return {
+                                    label: item
+                                        .title, //text comes from a collection of mongo
+                                    value: item.manga_id
+                                };
+                            }));
+
+                        },
+                        error: function (err) {
+                            alert(err.status + ' : ' + err.statusText);
+                        }
+                    });
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                   // alert("selected!");
+
+                    // console.log(event)
+                    // console.log(ui)
+
+
+                    if (ui.item) {
+                        // $('#search').val(ui.item.manga_id)
+                        window.location.replace('http://127.0.0.1:8890/mangas/fiche/'+ui.item.value);
+
+            
+                    }
+                }
+            });
+        })
+    </script>
+
+
+</body>
+
+</html>

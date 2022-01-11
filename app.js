@@ -7,7 +7,9 @@ const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session')
 const fileUpload = require('express-fileupload');
 const paginate = require('express-paginate');
-
+const {
+  Op
+} = require("sequelize");
 const database = require('./app/config/database');
 
 // Import des models 
@@ -193,12 +195,49 @@ app.use((req, res, next) => {
 
 
 
+app.get('/autocomplete', async function (req, res, next) {
+
+  // var regex = new RegExp(req.query["term"],'i')
+
+  console.log(req.query)
+
+  await mangas.findAll({
+    attributes: ['manga_id', 'title'],
+    where: {
+      title: {
+        [Op.regexp]: req.query.term
+      }
+
+    },
+    limit: 5
+  }).then(async function (search) {
+
+   // console.log(search)
+
+    var data = []
+
+    for (let i = 0; i < search.length; i++) {
+
+      let obj = {
+        manga_id: search[i].manga_id,
+        title:search[i].title
+      };
+      data.push(obj);
+    }
+
+    console.log(data)
+
+    res.jsonp(data)
+  })
+
+  next();
+});
 
 
 // Routes handler
 const index = require('./app/routes/routes.index')
 app.use('/', index);
-const manga = require('./app/routes/routes.manga')
+const manga = require('./app/routes/routes.manga');
 app.use('/mangas', manga);
 
 app.set("port", process.env.PORT || 8890);

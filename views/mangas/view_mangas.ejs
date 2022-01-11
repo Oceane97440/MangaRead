@@ -53,8 +53,8 @@
         <input type="hidden" id="selected_rating" name="selected_rating" value="" required="required">
     </label>
     <h2 class="bold rating-header">
-        <%if (locals.user) {%>
-        <%if (mangas_user) { %>
+        <%if (!utilities.empty(locals.user)) {%>
+        <%if (!utilities.empty(mangas_user)) { %>
         <span class="selected-rating"><%=mangas_user.score%></span><small> / 5</small>
 
         <%}%>
@@ -88,7 +88,7 @@
     <% for (let i=0; i < mangas_chapters.length; i++) { %>
 
     <li><a
-            href="/mangas/<%=mangas_chapters[i].chapter.manga_id %>/page/<%=mangas_chapters[i].chapter.chapter_id %>"><%=mangas_chapters[i].chapter.title %></a>
+            href="/mangas/<%=mangas_chapters[i].chapter.manga_id %>/page/<%=mangas_chapters[i].chapter.chapter_id %>" target="_blank"><%=mangas_chapters[i].chapter.title %></a>
     </li>
     <% } %>
 
@@ -101,7 +101,8 @@
 
 
 
-        <%if (mangas_user) { %>
+        <%if (!utilities.empty(locals.user)) {%>
+        <%if (!utilities.empty(mangas_user)) { %>
             <%if (mangas_user.score) { %>
             var nb=parseInt('<%=mangas_user.score%>')
             for (i = 1; i <= nb; ++i) {
@@ -125,6 +126,7 @@
         <%}%>
       
 
+        <%}%>
         <%}%>
 
 
