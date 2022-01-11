@@ -1,115 +1,191 @@
-<!DOCTYPE html>
-<html lang="fr">
+<!doctype html>
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <link href="/admin/css/style.css" rel="stylesheet" />
-    <script src="https://kit.fontawesome.com/4d66efb478.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Listes des Mangas</title>
 
-    <title>Liste des Mangas</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="/admin/css/interface.css" rel="stylesheet" />
+
+    <style>
+        div.ui-helper-hidden-accessible {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="nav">
+        <input type="checkbox" id="nav-check">
+        <div class="nav-header">
+            <div class="nav-title">
+                <i class="fas fa-book-reader"></i> MangaLife
+            </div>
+        </div>
+        <div class="nav-btn">
+            <label for="nav-check">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+        </div>
 
-
+        <div class="nav-links">
+            <a href="/">Accueil</a>
+            <a href="/mangas">Listes des Mangas</a>
+            <a href="/login">Connexion</a>
+            <input type="text" id="search" placeholder="Rechercher un mangas">
+        </div>
+    </div>
 
 
     <div class="container">
-        <ul>
+        <section>
+            <h1>Annuaire Mangas en lecture en ligne</h1>
+            <hr>
+            <div class="row">
+                <% for (let i=0; i < mangas.length; i++) { %>
+                <div class="example-1 card">
 
-            <li><a href="/mangas/create">Ajouter une mangas</a></li>
-        </ul>
-        <ul>
+                    <div class="wrapper"style="
+                    background: url(<%= mangas[i].cover %>) 5% 1%/cover no-repeat;
+                    width: 65%;
+                    ">
+                    <div>
+                        <a  href="/mangas/fiche/<%= mangas[i].manga_id %>" >Lite</a>
 
-            <%if (!utilities.empty(shonen)) { %>
-            <li><a href="/mangas/categorie/<%=shonen[0].category_id%>">
-                    Shônen
-                    <span><%=Object(shonen).length%></span></a>
-            </li>
-            <%}%>
-            <% if(!utilities.empty(shojo)) { %>
+                    </div>
 
-            <li><a href="/mangas/categorie/<%=shojo[0].category_id%>"> Shôjo
-                    <span><%=Object(shojo).length%></span></a>
+                        <div class="date">
+                           <a href="/mangas/categorie/<%= mangas[i].category_id %>"><span class="day"> <%= mangas[i].category.label %></span></a>
+                        </div>
+                        <div class="data">
+                            <div class="content">
+                                <h1 class="title"><a href="/mangas/<%= mangas[i].manga_id %>/page/<%= mangas_chapter[i].chapter.chapter_id %>">Voir la fiche</a></h1>
+                                <small>Noté en moyenne à <%= mangas[i].score_total %>/5</small>
+                               
+                            </div>
 
-            </li>
-            <% } %>
-            <% if(!utilities.empty(seinen)) { %>
-            <li><a href="/mangas/categorie/<%=seinen[0].category_id%>">Seinen
-                    <span><%=Object(seinen).length%></span></a>
+                        </div>
+                    </div>
+               
+                </div>
+                <% } %>
 
-            </li>
-            <% } %>
-            <% if(!utilities.empty(yaoi)) { %>
+            </div>
+        </section>
+        <aside>
 
-            <li><a href="/mangas/categorie/<%=yaoi[0].category_id%>"> Yaoi
-                    <span><%=Object(yaoi).length%></span></a>
+            <h2>Liste des catégories</h2>
+            <hr>
+            
+            <ul id="categorie">
 
-            </li>
-            <% } %>
-            <% if(!utilities.empty(yuri)) { %>
+                <%if (!utilities.empty(shonen)) { %>
+                <li class="cat"><a href="/mangas/categorie/<%=shonen[0].category_id%>">
+                        Shônen
+                        <span>(<%=Object(shonen).length%>)</span></a>
+                </li>
+                <%}%>
+                <% if(!utilities.empty(shojo)) { %>
 
-            <li><a href="/mangas/categorie/<%=yuri[0].category_id%>">Yuri
-                    <span><%=Object(yuri).length%></span></a>
+                <li class="cat"><a href="/mangas/categorie/<%=shojo[0].category_id%>"> Shôjo
+                        <span>(<%=Object(shojo).length%>)</span></a>
 
-            </li>
-            <% } %>
+                </li>
+                <% } %>
+                <% if(!utilities.empty(seinen)) { %>
+                <li class="cat"><a href="/mangas/categorie/<%=seinen[0].category_id%>">Seinen
+                        <span>(<%=Object(seinen).length%>)</span></a>
 
-        </ul>
-        <div class="row">
+                </li>
+                <% } %>
+                <% if(!utilities.empty(yaoi)) { %>
 
+                <li class="cat"><a href="/mangas/categorie/<%=yaoi[0].category_id%>"> Yaoi
+                        <span>(<%=Object(yaoi).length%>)</span></a>
 
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th>Titre du manga</th>
-                        <th>Cover</th>
-                        <th>Categorie</th>
-                        <th>Ajouter un chapitre</th>
+                </li>
+                <% } %>
+                <% if(!utilities.empty(yuri)) { %>
 
+                <li class="cat"><a href="/mangas/categorie/<%=yuri[0].category_id%>">Yuri
+                        <span>(<%=Object(yuri).length%>)</span></a>
 
+                </li>
+                <% } %>
 
-                    </tr>
-                </thead>
-                <tbody>
-                    <% for (let i=0; i < mangas.length; i++) { %>
-                    <tr>
+            </ul>
 
-                        <td><%= mangas[i].title %></td>
-                        <td><a href="/mangas/fiche/<%= mangas[i].manga_id %>"><img src="<%= mangas[i].cover %>"
-                                    width="30%" alt=""></a></td>
-                        <td><a href="/mangas/categorie/<%= mangas[i].category_id %>"><%= mangas[i].category.label %></a>
-                        </td>
-                        <td><a
-                                href="/mangas/<%= mangas[i].manga_id %>/page/<%= mangas_chapter[i].chapter.chapter_id %>">Lire</a>
-                        </td>
-
-
-
-
-                    </tr>
-                    <% } %>
-
-                </tbody>
-            </table>
-        </div>
-
-
-
+        </aside>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
-    </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+
+
+
+
+
+
+    <script>
+        $(document).ready(function ($) {
+
+            $('#search').autocomplete({
+                source: function (req, res) {
+                    $.ajax({
+                        url: "autocomplete/",
+                        dataType: "jsonp",
+                        type: "GET",
+                        data: req,
+
+                        success: function (data) {
+                            console.log(data)
+
+
+                            res($.map(data, function (item) {
+
+
+                                return {
+                                    label: item
+                                        .title, //text comes from a collection of mongo
+                                    value: item.manga_id
+                                };
+                            }));
+
+                        },
+                        error: function (err) {
+                            alert(err.status + ' : ' + err.statusText);
+                        }
+                    });
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                    // alert("selected!");
+
+                    // console.log(event)
+                    // console.log(ui)
+
+
+                    if (ui.item) {
+                        // $('#search').val(ui.item.manga_id)
+                        window.location.replace('http://127.0.0.1:8890/mangas/fiche/' + ui.item
+                            .value);
+
+
+                    }
+                }
+            });
+        })
     </script>
 
+
+    <script src="/admin/js/nav.js"></script>
 </body>
+
+</html>

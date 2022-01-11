@@ -14,7 +14,10 @@ const ModelPage = require("../models/model.pages")
 const ModelCategory = require("../models/model.category")
 const ModelUserManga = require("../models/model.users_mangas")
 const ModelChapterPage = require("../models/model.chapters_pages")
-const ModelMangasChapters = require("../models/model.mangas_chapter")
+const ModelMangasChapters = require("../models/model.mangas_chapter");
+const {
+    data
+} = require('jquery');
 
 
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -22,8 +25,56 @@ const PASSWORD_REGEX = /^(?=.*\d).{4,12}$/;
 
 /**Page accueil */
 exports.index = async (req, res) => {
+    const data = new Object();
+    data.mangas = await ModelMangas.findAll({
+        where:{
+            score_total:{
+                [Op.gte]:1
+            }
+        },
+        include: [{
+            model: ModelCategory
+        }]
+    });
 
-    res.render('landingpage')
+    data.mangas_chapter = await ModelMangasChapters.findAll({
+        include: [{
+            model: ModelChapter
+        }]
+    })
+
+
+    data.shonen = await ModelMangas.findAll({
+        where: {
+            category_id: 1
+        }
+    });
+    data.shojo = await ModelMangas.findAll({
+        where: {
+            category_id: 2
+        }
+    });
+
+
+    data.seinen = await ModelMangas.findAll({
+        where: {
+            category_id: 3
+        }
+    });
+
+    data.yaoi = await ModelMangas.findAll({
+        where: {
+            category_id: 4
+        }
+    });
+    data.yuri = await ModelMangas.findAll({
+        where: {
+            category_id: 5
+        }
+    });
+
+    data.utilities = Utilities
+    res.render('landingpage', data)
 }
 
 
@@ -349,12 +400,12 @@ exports.delete = async (req, res) => {
 
             await ModelMangas.destroy({
                 where: {
-                    manga_id:manga_id
+                    manga_id: manga_id
                 }
             });
 
             res.redirect('/admin')
-        } 
+        }
     })
 
 }

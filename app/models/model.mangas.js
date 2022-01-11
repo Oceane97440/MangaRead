@@ -34,7 +34,7 @@ const Mangas = sequelize.define('mangas', {
         allowNull: true
     },
     score_total: {
-        type: Sequelize.STRING(),
+        type: Sequelize.DECIMAL(),
         allowNull: true,
         defaultValue: 0
 

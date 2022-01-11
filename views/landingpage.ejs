@@ -4,24 +4,127 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>jQuery UI Autocomplete - Default functionality</title>
+    <title>MangaLife</title>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="/admin/css/interface.css" rel="stylesheet" />
+
     <style>
-        div.ui-helper-hidden-accessible{
+        div.ui-helper-hidden-accessible {
             display: none;
         }
     </style>
 </head>
 
 <body>
+    <div class="nav">
+        <input type="checkbox" id="nav-check">
+        <div class="nav-header">
+            <div class="nav-title">
+                <i class="fas fa-book-reader"></i> MangaLife
+            </div>
+        </div>
+        <div class="nav-btn">
+            <label for="nav-check">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+        </div>
+
+        <div class="nav-links">
+            <a href="//github.io/jo_geek">Accueil</a>
+            <a href="http://stackoverflow.com/users/4084003/">Listes des Mangas</a>
+            <a href="https://in.linkedin.com/in/jonesvinothjoseph">Connexion</a>
+            <input type="text" id="search" placeholder="Rechercher un mangas">
+        </div>
+    </div>
+
+
+    <div class="container">
+        <section>
+            <h1>Mise à jour des mangas les Mangas les plus vus</h1>
+            <hr>
+            <div class="row">
+                <% for (let i=0; i < mangas.length; i++) { %>
+
+                <div class="example-1 card">
+                   
+                    <div class="wrapper"style="
+                    background: url(<%= mangas[i].cover %>) 5% 1%/cover no-repeat;
+                    width: 65%;
+                    ">
+
+                        <div class="date">
+                            <a href="/mangas/fiche/<%= mangas[i].manga_id %>"><span class="day"><%= mangas[i].title %></span></a>
+                        </div>
+                        <div class="data">
+                            <div class="content">
+                                <h1 class="title"><a href="/mangas/<%= mangas[i].manga_id %>/page/<%= mangas_chapter[i].chapter.chapter_id %>">Lire le chapitre</a></h1>
+                               
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+
+            </div>
+        </section>
+        <aside>
+
+            <h2>Liste des catégories</h2>
+            <hr>
+            
+            <ul id="categorie">
+
+                <%if (!utilities.empty(shonen)) { %>
+                <li class="cat"><a href="/mangas/categorie/<%=shonen[0].category_id%>">
+                        Shônen
+                        <span>(<%=Object(shonen).length%>)</span></a>
+                </li>
+                <%}%>
+                <% if(!utilities.empty(shojo)) { %>
+
+                <li class="cat"><a href="/mangas/categorie/<%=shojo[0].category_id%>"> Shôjo
+                        <span>(<%=Object(shojo).length%>)</span></a>
+
+                </li>
+                <% } %>
+                <% if(!utilities.empty(seinen)) { %>
+                <li class="cat"><a href="/mangas/categorie/<%=seinen[0].category_id%>">Seinen
+                        <span>(<%=Object(seinen).length%>)</span></a>
+
+                </li>
+                <% } %>
+                <% if(!utilities.empty(yaoi)) { %>
+
+                <li class="cat"><a href="/mangas/categorie/<%=yaoi[0].category_id%>"> Yaoi
+                        <span>(<%=Object(yaoi).length%>)</span></a>
+
+                </li>
+                <% } %>
+                <% if(!utilities.empty(yuri)) { %>
+
+                <li class="cat"><a href="/mangas/categorie/<%=yuri[0].category_id%>">Yuri
+                        <span>(<%=Object(yuri).length%>)</span></a>
+
+                </li>
+                <% } %>
+
+            </ul>
+
+        </aside>
+    </div>
 
 
 
 
-    Search our models: <input type="text" name="search" id="search">
 
 
 
@@ -58,7 +161,7 @@
                 },
                 minLength: 1,
                 select: function (event, ui) {
-                   // alert("selected!");
+                    // alert("selected!");
 
                     // console.log(event)
                     // console.log(ui)
@@ -66,9 +169,10 @@
 
                     if (ui.item) {
                         // $('#search').val(ui.item.manga_id)
-                        window.location.replace('http://127.0.0.1:8890/mangas/fiche/'+ui.item.value);
+                        window.location.replace('http://127.0.0.1:8890/mangas/fiche/' + ui.item
+                            .value);
 
-            
+
                     }
                 }
             });
@@ -76,6 +180,7 @@
     </script>
 
 
+    <script src="/admin/js/nav.js"></script>
 </body>
 
 </html>
