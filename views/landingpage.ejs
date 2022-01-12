@@ -14,36 +14,12 @@
         integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link href="/admin/css/interface.css" rel="stylesheet" />
 
-    <style>
-        div.ui-helper-hidden-accessible {
-            display: none;
-        }
-    </style>
+
 </head>
 
 <body>
-    <div class="nav">
-        <input type="checkbox" id="nav-check">
-        <div class="nav-header">
-            <div class="nav-title">
-                <i class="fas fa-book-reader"></i> MangaLife
-            </div>
-        </div>
-        <div class="nav-btn">
-            <label for="nav-check">
-                <span></span>
-                <span></span>
-                <span></span>
-            </label>
-        </div>
 
-        <div class="nav-links">
-            <a href="//github.io/jo_geek">Accueil</a>
-            <a href="http://stackoverflow.com/users/4084003/">Listes des Mangas</a>
-            <a href="https://in.linkedin.com/in/jonesvinothjoseph">Connexion</a>
-            <input type="text" id="search" placeholder="Rechercher un mangas">
-        </div>
-    </div>
+    <%- include ("./admin/layouts/navbar.ejs") -%>
 
 
     <div class="container">
@@ -128,59 +104,8 @@
 
 
 
-    <script>
-        $(document).ready(function ($) {
 
-            $('#search').autocomplete({
-                source: function (req, res) {
-                    $.ajax({
-                        url: "autocomplete/",
-                        dataType: "jsonp",
-                        type: "GET",
-                        data: req,
-
-                        success: function (data) {
-                            console.log(data)
-
-
-                            res($.map(data, function (item) {
-
-
-                                return {
-                                    label: item
-                                        .title, //text comes from a collection of mongo
-                                    value: item.manga_id
-                                };
-                            }));
-
-                        },
-                        error: function (err) {
-                            alert(err.status + ' : ' + err.statusText);
-                        }
-                    });
-                },
-                minLength: 1,
-                select: function (event, ui) {
-                    // alert("selected!");
-
-                    // console.log(event)
-                    // console.log(ui)
-
-
-                    if (ui.item) {
-                        // $('#search').val(ui.item.manga_id)
-                        window.location.replace('http://127.0.0.1:8890/mangas/fiche/' + ui.item
-                            .value);
-
-
-                    }
-                }
-            });
-        })
-    </script>
-
-
-    <script src="/admin/js/nav.js"></script>
+    <script src="/admin/js/search.js"></script>
 </body>
 
 </html>

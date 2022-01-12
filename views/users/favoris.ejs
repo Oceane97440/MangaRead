@@ -1,20 +1,112 @@
-<a href="/list/favoris">Ma liste</a>
-<a href="/mangas">Liste des mangas</a>
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Listes des Mangas</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="/admin/css/interface.css" rel="stylesheet" />
+
+</head>
+
+<body>
+ 
+
+    <%- include ("../admin/layouts/navbar.ejs") -%>
+
+    <div class="container">
+        <section>
+            <h1>Liste des Mangas en favoris</h1>
+            <hr>
+            <div class="row">
+                <% for (let i=0; i < list_favorie.length; i++) { %>
+                <div class="example-1 card">
+
+                    <div class="wrapper"style="
+                    background: url(<%= list_favorie[i].manga.cover %>) 5% 1%/cover no-repeat;
+                    width: 65%;
+                    ">
+                  
+
+                        <div class="date">
+                            <a href="/mangas/categorie/<%= list_favorie[i].manga.category_id %>"><span class="day"> <%= list_favorie[i].manga.title %></span></a>
+                        </div>
+                        <div class="data">
+                            <div class="content">
+                                <h1 class="title"><a href="/mangas/fiche/<%= list_favorie[i].manga.manga_id %>">Voir la fiche</a></h1>
+                                <small>Noté en moyenne à <%= list_favorie[i].manga.score_total %>/5</small>
+                               
+                            </div>
+
+                        </div>
+                    </div>
+               
+                </div>
+                <% } %>
+
+            </div>
+        </section>
+        <aside>
+
+            <h2>Liste des catégories</h2>
+            <hr>
+            
+            <ul id="categorie">
+
+                <%if (!utilities.empty(shonen)) { %>
+                <li class="cat"><a href="/mangas/categorie/<%=shonen[0].category_id%>">
+                        Shônen
+                        <span>(<%=Object(shonen).length%>)</span></a>
+                </li>
+                <%}%>
+                <% if(!utilities.empty(shojo)) { %>
+
+                <li class="cat"><a href="/mangas/categorie/<%=shojo[0].category_id%>"> Shôjo
+                        <span>(<%=Object(shojo).length%>)</span></a>
+
+                </li>
+                <% } %>
+                <% if(!utilities.empty(seinen)) { %>
+                <li class="cat"><a href="/mangas/categorie/<%=seinen[0].category_id%>">Seinen
+                        <span>(<%=Object(seinen).length%>)</span></a>
+
+                </li>
+                <% } %>
+                <% if(!utilities.empty(yaoi)) { %>
+
+                <li class="cat"><a href="/mangas/categorie/<%=yaoi[0].category_id%>"> Yaoi
+                        <span>(<%=Object(yaoi).length%>)</span></a>
+
+                </li>
+                <% } %>
+                <% if(!utilities.empty(yuri)) { %>
+
+                <li class="cat"><a href="/mangas/categorie/<%=yuri[0].category_id%>">Yuri
+                        <span>(<%=Object(yuri).length%>)</span></a>
+
+                </li>
+                <% } %>
+
+            </ul>
+
+        </aside>
+    </div>
 
 
-<h1>Liste des favoris</h1>
-<hr>
 
 
 
-<% for (var i = 0; i < list_favorie.length; i++) { %>
 
+    <script src="/admin/js/search.js"></script>
 
+</body>
 
-<p>Id:<%= list_favorie[i].manga.manga_id %></p>
-<p>Nom du mangas:<%= list_favorie[i].manga.title %></p>
-
-<a href="/mangas/fiche/<%= list_favorie[i].manga.manga_id %>"><img src="<%= list_favorie[i].manga.cover %>" width="20%" alt=""></a>
-
-
-<% } %>
+</html>

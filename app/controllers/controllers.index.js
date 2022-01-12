@@ -297,6 +297,7 @@ exports.profil = async (req, res) => {
             model: ModelMangas
         }]
     })
+    data.utilities = Utilities
 
     res.render('users/profil', data)
 }
@@ -304,7 +305,7 @@ exports.profil = async (req, res) => {
 exports.logout = async (req, res) => {
 
     req.session = null
-    res.redirect('/login')
+    res.redirect('/')
 }
 
 exports.favoris = async (req, res) => {
@@ -324,7 +325,39 @@ exports.favoris = async (req, res) => {
         ]
     })
 
-    console.log(data.list_favorie)
+   
+
+    data.shonen = await ModelMangas.findAll({
+        where: {
+            category_id: 1
+        }
+    });
+    data.shojo = await ModelMangas.findAll({
+        where: {
+            category_id: 2
+        }
+    });
+
+
+    data.seinen = await ModelMangas.findAll({
+        where: {
+            category_id: 3
+        }
+    });
+
+    data.yaoi = await ModelMangas.findAll({
+        where: {
+            category_id: 4
+        }
+    });
+    data.yuri = await ModelMangas.findAll({
+        where: {
+            category_id: 5
+        }
+    });
+
+    data.utilities = Utilities
+
 
     res.render('users/favoris', data)
 }

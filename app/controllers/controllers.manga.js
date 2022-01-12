@@ -216,6 +216,38 @@ exports.categorie = async (req, res) => {
     })
 
 
+    data.shonen = await ModelMangas.findAll({
+        where: {
+            category_id: 1
+        }
+    });
+    data.shojo = await ModelMangas.findAll({
+        where: {
+            category_id: 2
+        }
+    });
+
+
+    data.seinen = await ModelMangas.findAll({
+        where: {
+            category_id: 3
+        }
+    });
+
+    data.yaoi = await ModelMangas.findAll({
+        where: {
+            category_id: 4
+        }
+    });
+    data.yuri = await ModelMangas.findAll({
+        where: {
+            category_id: 5
+        }
+    });
+
+    data.utilities = Utilities
+
+
     res.render("mangas/list_category", data)
 
 
@@ -456,6 +488,7 @@ exports.pages_all = async (req, res) => {
 
 
 
+    data.utilities = Utilities
 
 
 
@@ -507,6 +540,23 @@ exports.read = async (req, res) => {
 
             })
 
+            var all_chapter = await ModelMangasChapters.findAll({
+                where: {
+                    manga_id: manga_id
+                },
+                include:[
+                    {
+                        model:ModelChapter
+                    },
+                    {
+                        model:ModelMangas
+                    }
+                ]
+
+
+
+            })
+
             var preview = await ModelChapter.min('chapter_id', {
 
                 where: {
@@ -537,8 +587,9 @@ exports.read = async (req, res) => {
                 pages: paginate.getArrayPages(req)(3, pageCount, req.query.page),
                 chapter_id: chapter_id,
                 next: next,
-                preview: preview
-
+                preview: preview,
+                utilities:Utilities,
+                all_chapter:all_chapter
             });
         })
 

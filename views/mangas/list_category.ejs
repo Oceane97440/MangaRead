@@ -1,11 +1,128 @@
-<h1><%= mangas[0].category.label %></h1>
-<% for (let i=0; i < mangas.length; i++) { %>
+<!doctype html>
+<html lang="en">
 
-    <ul>
-        <li><%= mangas[i].title %></li>
-        <li><a href="/mangas/fiche/<%= mangas[i].manga_id %>"><img src="<%= mangas[i].cover %>" width="30%" alt=""></a></li>
-        
-    </ul>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Listes des Mangas</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="/admin/css/interface.css" rel="stylesheet" />
+
+    <style>
+        div.ui-helper-hidden-accessible {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
 
 
-    <% } %>
+    <%- include ("../admin/layouts/navbar.ejs") -%>
+
+
+
+
+
+
+
+    <div class="container">
+        <section>
+            <h1>Liste des catégorie : <%= mangas[0].category.label %></h1>
+            <hr>
+            <div class="row">
+                <% for (let i=0; i < mangas.length; i++) { %>
+                <div class="example-1 card">
+
+                    <div class="wrapper" style="
+                    background: url(<%= mangas[i].cover %>) 5% 1%/cover no-repeat;
+                    width: 65%;
+                    ">
+                        <div>
+                            <a href="/mangas/fiche/<%= mangas[i].manga_id %>">Lire</a>
+
+                        </div>
+
+                        <div class="date">
+                            <a href="/mangas/categorie/<%= mangas[i].category_id %>"><span class="day">
+                                    <%= mangas[i].category.label %></span></a>
+                        </div>
+                        <div class="data">
+                            <div class="content">
+                                <h1 class="title"><a
+                                        href="/mangas/fiche/<%= mangas[i].manga_id %>">Voir
+                                        la fiche</a></h1>
+                                <small>Noté en moyenne à <%= mangas[i].score_total %>/5</small>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <% } %>
+
+            </div>
+        </section>
+        <aside>
+
+            <h2>Liste des catégories</h2>
+            <hr>
+
+            <ul id="categorie">
+
+                <%if (!utilities.empty(shonen)) { %>
+                <li class="cat"><a href="/mangas/categorie/<%=shonen[0].category_id%>">
+                        Shônen
+                        <span>(<%=Object(shonen).length%>)</span></a>
+                </li>
+                <%}%>
+                <% if(!utilities.empty(shojo)) { %>
+
+                <li class="cat"><a href="/mangas/categorie/<%=shojo[0].category_id%>"> Shôjo
+                        <span>(<%=Object(shojo).length%>)</span></a>
+
+                </li>
+                <% } %>
+                <% if(!utilities.empty(seinen)) { %>
+                <li class="cat"><a href="/mangas/categorie/<%=seinen[0].category_id%>">Seinen
+                        <span>(<%=Object(seinen).length%>)</span></a>
+
+                </li>
+                <% } %>
+                <% if(!utilities.empty(yaoi)) { %>
+
+                <li class="cat"><a href="/mangas/categorie/<%=yaoi[0].category_id%>"> Yaoi
+                        <span>(<%=Object(yaoi).length%>)</span></a>
+
+                </li>
+                <% } %>
+                <% if(!utilities.empty(yuri)) { %>
+
+                <li class="cat"><a href="/mangas/categorie/<%=yuri[0].category_id%>">Yuri
+                        <span>(<%=Object(yuri).length%>)</span></a>
+
+                </li>
+                <% } %>
+
+            </ul>
+
+        </aside>
+    </div>
+
+
+
+
+
+
+    <script src="/admin/js/search.js"></script>
+
+</body>
+
+</html>

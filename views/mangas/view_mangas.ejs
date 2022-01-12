@@ -5,97 +5,132 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+
+
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
         integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <link href="/admin/css/view.css" rel="stylesheet" />
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 
-    <style>
-        .rating-header {
-            margin-top: -10px;
-            margin-bottom: 10px;
-        }
-    </style>
-    <title>Document</title>
+    <title>Fiche d'info : <%=mangas.title %></title>
 </head>
 
+<body>
+    <%- include ("../admin/layouts/navbar.ejs") -%>
 
 
-<h1><%=mangas.title %></h1>
-<hr>
+    <div class="container-fiche">
+        <section>
+            <h1>Manga <%=mangas.title %></h1>
+            <hr>
+            <div class="row">
+                <div class="example-1">
 
-<img src="<%=mangas.cover %>" alt="" width="20%">
-<ul>
-    <li>Status:<%=mangas.status %></li>
-    <li>Auteur(s):<%=mangas.author %></li>
-    <li>Date de sortie:<%=mangas.date %></li>
-    <li>Categorie:<%=mangas.category.label %></li>
-    <li>Synopsis:<%=mangas.description %></li>
+                    <div class="wrapper"style="
+                    background: url(<%= mangas.cover %>) 5% 1%/cover no-repeat;
+                    width: 65%;
+                    ">
+                  
 
-</ul>
+                        <div class="date">
 
-<div>
-    <input type="checkbox" id="like" style="
-    position: relative;
-    left: 33px;
-    cursor: pointer;
-    opacity: 0;
-" value="0">
-    <img src="/admin/img/nolike.png" width="4%" id="img_like" alt="">
-</div>
+                            <input type="checkbox" id="like" style="
+                            position: relative;
+                            left: 33px;
+                            cursor: pointer;
+                            opacity: 0;
+                        " value="0">
+                            <img src="/admin/img/nolike.png" width="30%" id="img_like" alt="">
+                        
+                        </div>
+                        <div class="data">
+                            <div class="content">
+                                <h1 class="title">
+                                    <%if (!utilities.empty(locals.user)) {%>
+                                        <%if (!utilities.empty(mangas_user)) { %>
+                                            <span class="selected-rating"><%=mangas_user.score%>/ 5</span> 
+                                    
+                                            <%}%>
+                                    <%}%>
+
+                                    
+                            <button type="button" class="btnrating btn btn-default btn-sm" data-attr="1" id="rating-star-1">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" class="btnrating btn btn-default btn-sm" data-attr="2" id="rating-star-2">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" class="btnrating btn btn-default btn-sm" data-attr="3" id="rating-star-3">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" class="btnrating btn btn-default btn-sm" data-attr="4" id="rating-star-4">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" class="btnrating btn btn-default btn-sm" data-attr="5" id="rating-star-5">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </button>
+
+                                </h1>
+                                <small>Noté en moyenne à <%= mangas.score_total %>/5</small>
+                               
+                            </div>
+
+                        </div>
+                    </div>
+               
+                </div>
+                
+                <div class="col-md-6">
+                    <h2>Fiche d'informations</h2>
+                    <ul class="list-group">
+                        <li class="list-group-item"> <strong>Status:</strong> <span class="badge badge-success"> <%=mangas.status %></span>
+                           </li>
+                        <li class="list-group-item"> <strong>Auteur(s): </strong> <%=mangas.author %></li>
+                        <li class="list-group-item"> <strong>Date de sortie:</strong>   <%=mangas.date %></li>
+                        <li class="list-group-item"> <strong>Categorie:</strong>   <a href="/mangas/categorie/<%=mangas.category.category_id %>"><%=mangas.category.label %></a></li>
+                        <li class="list-group-item"> <strong>Synopsis:</strong> <br>    <%=mangas.description %></li>
+
+                      </ul>
+                    <ul>
+                      
+              
+                    
+                </div>
+            
+            </div>
+        </section>
+     
+
+    </div>
+
+    <footer>
+
+        <h2>Liste des chapitre</h2>
+        <hr>
+
+        <ul>
+            <% for (let i=0; i < mangas_chapters.length; i++) { %>
+
+            <li><a href="/mangas/<%=mangas_chapters[i].chapter.manga_id %>/page/<%=mangas_chapters[i].chapter.chapter_id %>" target="_blank"><%=mangas_chapters[i].chapter.title %></a></li>
+            <% } %>
+
+        <ul>
+    </footer>
 
 
 
 
-<div class="form-group" id="rating-ability-wrapper">
-    <label class="control-label" for="rating">
 
-        <span class="field-label-info"></span>
-        <input type="hidden" id="selected_rating" name="selected_rating" value="" required="required">
-    </label>
-    <h2 class="bold rating-header">
-        <%if (!utilities.empty(locals.user)) {%>
-        <%if (!utilities.empty(mangas_user)) { %>
-        <span class="selected-rating"><%=mangas_user.score%></span><small> / 5</small>
-
-        <%}%>
-        <%}else{%>
-        <span class="selected-rating">0</span><small> / 5</small>
-
-        <%}%>
-        <p>Noté en moyenne à <small><%=score_total%>/5 sur <%=total_vote%> votes</small></p>
-
-    </h2>
-    <button type="button" class="btnrating btn btn-default btn-sm" data-attr="1" id="rating-star-1">
-        <i class="fa fa-star" aria-hidden="true"></i>
-    </button>
-    <button type="button" class="btnrating btn btn-default btn-sm" data-attr="2" id="rating-star-2">
-        <i class="fa fa-star" aria-hidden="true"></i>
-    </button>
-    <button type="button" class="btnrating btn btn-default btn-sm" data-attr="3" id="rating-star-3">
-        <i class="fa fa-star" aria-hidden="true"></i>
-    </button>
-    <button type="button" class="btnrating btn btn-default btn-sm" data-attr="4" id="rating-star-4">
-        <i class="fa fa-star" aria-hidden="true"></i>
-    </button>
-    <button type="button" class="btnrating btn btn-default btn-sm" data-attr="5" id="rating-star-5">
-        <i class="fa fa-star" aria-hidden="true"></i>
-    </button>
-</div>
-
-<h2>Liste des chapitre</h2>
-<hr>
-<ul>
-    <% for (let i=0; i < mangas_chapters.length; i++) { %>
-
-    <li><a
-            href="/mangas/<%=mangas_chapters[i].chapter.manga_id %>/page/<%=mangas_chapters[i].chapter.chapter_id %>" target="_blank"><%=mangas_chapters[i].chapter.title %></a>
-    </li>
-    <% } %>
-
-</ul>
 
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
+<script src="/admin/js/search.js"></script>
+
 <script>
     $(document).ready(function ($) {
 
@@ -129,14 +164,17 @@
         <%}%>
         <%}%>
 
+       
 
-   
 
         $(".btnrating").on('click', (function (e) {
 
-            
+            <%if (utilities.empty(locals.user)) {%>
 
-            var previous_value = $("#selected_rating").val();
+                alert('Connectez-vous pour pouvoir ajouter ce manga dans votre liste')
+
+            <%}else {%>
+                var previous_value = $("#selected_rating").val();
 
             var selected_value = $(this).attr("data-attr");
             $("#selected_rating").val(selected_value);
@@ -174,13 +212,23 @@
                 $("#rating-star-" + ix).toggleClass('btn-default');
             }
 
+            <%}%>
+
+
+       
         }));
 
 
 
         $("#like").on('click', (function (e) {
 
-            var checkBox = document.getElementById("like");
+            <%if (utilities.empty(locals.user)) {%>
+
+            alert('Connectez-vous pour pouvoir voter')
+
+            <%}else {%>
+
+                var checkBox = document.getElementById("like");
             var isFavoris = document.getElementById("like").value
             // If the checkbox is checked, display the output text
                 if (checkBox.checked == true && isFavoris != 1) {
@@ -230,11 +278,17 @@
                     req.responseType = "json";
                     req.send(dataSend);
                 }
+            <%}%>
+ 
+
             
 
         }))
 
+    
+    
     });
+   
 </script>
 </body>
 

@@ -7,21 +7,29 @@ const path = require('path')
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
+    minWidth: 800, 
+    maxWidth: 1300,
+    minHeight: 800,
+    maxHeight: 1000,
     width: 1069,
-    height: 600,
+    height: 1000,
+    resizable: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
   })
 
   // and load the index.html of the app.
-  mainWindow.loadFile('index.html')
-  //mainWindow.loadURL('http://127.0.0.1:8889')
+  //mainWindow.loadFile('index.html')
+  mainWindow.loadURL('http://127.0.0.1:8890/login')
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+ //  mainWindow.webContents.openDevTools()
 }
-
+// mainWindow.webContents.on('new-window', function(e, url) {
+//   e.preventDefault();
+//   require('electron').Shell.openExternal(url);
+// });
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.

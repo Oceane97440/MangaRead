@@ -11,7 +11,7 @@ body {
 }
 
 #search {
-  width: 30%;
+  width: 24%;
   border-radius: 10px;
   height: 23px;
 }
@@ -127,13 +127,19 @@ body {
 
 
 section {
-  background: #ABABAB;
+  background: #ffffff;
   grid-area: section;
 }
 
 aside {
-  background: #C9C9C9;
+  background: #2c3e50d9;
   grid-area: aside;
+  color: white;
+  font-size: 13px;
+  text-align: -webkit-left;
+  margin-top: 76px;
+  height: 50%;
+
 }
 
 
@@ -258,4 +264,13 @@ small {
   top: 40px;
   color: white;
   padding: 5px;
+}
+
+.rating-header {
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+div.ui-helper-hidden-accessible {
+  display: none;
 }

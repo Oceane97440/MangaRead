@@ -1,12 +1,37 @@
-<h1>Profil de <%=user.user.username%></h1>
+<!doctype html>
+<html lang="en">
 
-<img src="<%=user.user.image%>" alt="" width="10%">
-<ul>
-    <li>Email : <%=user.user.email%></li>
-    <li>Role : <% if(user.user.role === 1){%>
-        Administrateur
-        <%}else{%>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Profil de <%=user.user.username%></title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="/admin/css/interface.css" rel="stylesheet" />
+
+
+</head>
+
+<body>
+
+    <%- include ("../admin/layouts/navbar.ejs") -%>
+
+    <h1>Profil de <%=user.user.username%></h1>
+
+    <img src="<%=user.user.image%>" alt="" width="10%">
+    <ul>
+        <li>Email : <%=user.user.email%></li>
+        <li>Role : <% if(user.user.role === 1){%>
+            Administrateur
+            <%}else{%>
             Lecteur
-        <%} %>
-    </li>
-</ul>
+            <%} %>
+        </li>
+    </ul>
+
+</body>
