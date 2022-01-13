@@ -31,19 +31,22 @@
                 <% for (let i=0; i < mangas.length; i++) { %>
 
                 <div class="example-1 card">
-                   
-                    <div class="wrapper"style="
+
+                    <div class="wrapper" style="
                     background: url(<%= mangas[i].cover %>) 5% 1%/cover no-repeat;
                     width: 65%;
                     ">
 
                         <div class="date">
-                            <a href="/mangas/fiche/<%= mangas[i].manga_id %>"><span class="day"><%= mangas[i].title %></span></a>
+                            <a href="/mangas/fiche/<%= mangas[i].manga_id %>"><span
+                                    class="day"><%= mangas[i].title %></span></a>
                         </div>
                         <div class="data">
                             <div class="content">
-                                <h1 class="title"><a href="/mangas/<%= mangas[i].manga_id %>/page/<%= mangas_chapter[i].chapter.chapter_id %>">Lire le chapitre</a></h1>
-                               
+                                <h1 class="title"><a
+                                        href="/mangas/<%= mangas[i].manga_id %>/page/<%= mangas_chapter[i].chapter.chapter_id %>">Lire
+                                        le chapitre</a></h1>
+
                             </div>
 
                         </div>
@@ -57,7 +60,7 @@
 
             <h2>Liste des catégories</h2>
             <hr>
-            
+
             <ul id="categorie">
 
                 <%if (!utilities.empty(shonen)) { %>
@@ -104,6 +107,13 @@
 
 
 
+    <footer style="
+    background: #4b5a6a;
+    color: white;
+    text-align: center;
+">
+        <a href="https://oceane97440.github.io/MonPortfolio/" target="_blanck"> © Copyright OceaneSautron</a>
+    </footer>
 
 
     <script src="/admin/js/search.js"></script>
