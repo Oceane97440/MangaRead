@@ -265,6 +265,7 @@ exports.chapter = async (req, res) => {
             manga_id: req.params.mangas_id
         }
     });
+    data.utilities = Utilities
 
     res.render("mangas/create_chapter", data)
 }
@@ -359,6 +360,7 @@ exports.chapter_all = async (req, res) => {
 
 
 
+    data.utilities = Utilities
 
 
 
@@ -378,6 +380,7 @@ exports.pages = async (req, res) => {
             chapter_id: chapter_id
         }
     });
+    data.utilities = Utilities
 
     res.render("mangas/create_page", data)
 }

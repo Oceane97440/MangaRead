@@ -21,7 +21,7 @@ const createWindow = () => {
 
   // and load the index.html of the app.
   //mainWindow.loadFile('index.html')
-  mainWindow.loadURL('http://127.0.0.1:8890/login')
+  mainWindow.loadURL('http://127.0.0.1:8890')
 
   // Open the DevTools.
  //  mainWindow.webContents.openDevTools()

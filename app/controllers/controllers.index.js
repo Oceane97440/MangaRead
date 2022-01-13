@@ -413,7 +413,7 @@ exports.admin = async (req, res) => {
             model: ModelChapter
         }]
     })
-
+    data.utilities = Utilities
 
     res.render('admin/dashboard', data)
 }

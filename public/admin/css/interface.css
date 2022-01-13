@@ -255,6 +255,10 @@ a {
 
 }
 
+ul{
+  list-style-type:none
+}
+
 .cat {
   margin: 20px;
 }

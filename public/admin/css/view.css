@@ -128,7 +128,9 @@ body {
 
 }
 
-
+ul{
+    list-style-type:none
+  }
 
 section {
     /* background: #ABABAB!important; */
