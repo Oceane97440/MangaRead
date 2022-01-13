@@ -11,7 +11,6 @@ router.post("/signup/add", index.signup_add);
 router.get("/login", index.login);
 router.post("/login/add", index.login_add);
 
-
 // Action du user
 router.get("/profil", index.profil);
 router.get("/list/favoris", index.favoris);
@@ -24,11 +23,5 @@ router.post("/vote", index.vote);
 router.get("/logout", index.logout);
 
 
-
-/** 
-
-
-router.get("/home_page", index.index);
-router.get("/logout", index.logout)*/ 
 
 module.exports = router;

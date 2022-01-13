@@ -19,7 +19,34 @@
 
 <body>
 
-    <%- include ("../admin/layouts/navbar.ejs") -%>
+    <div class="nav">
+        <input type="checkbox" id="nav-check">
+        <div class="nav-header">
+            <div class="nav-title">
+                <a href="/" style="color: white;"><i class="fas fa-book-reader"></i> MangaLife</a>
+            </div>
+        </div>
+        <div class="nav-btn">
+            <label for="nav-check">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+        </div>
+
+        <div class="nav-links">
+            <a href="/mangas">Listes des Mangas</a>
+            <a href="/list/favoris">Mes favoris</a>
+            <a href="/profil"><%=locals.user.username%></a>
+            <a href="/logout">Déconnexion</a>
+
+
+
+            <input type="text" id="search" placeholder="Rechercher un mangas">
+        </div>
+    </div>
+
+
 
     <h1>Profil de <%=user.user.username%></h1>
 

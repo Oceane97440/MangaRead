@@ -167,7 +167,7 @@ app.get('/*', function (req, res, next) {
     res.locals.user.image = req.session.user.image;
     res.locals.user.role = req.session.user.role;
 
-    console.log(res.locals.user)
+    //console.log(res.locals.user)
   }
   next();
 });
@@ -181,7 +181,7 @@ app.post('/*', function (req, res, next) {
     res.locals.user.image = req.session.user.image;
     res.locals.user.role = req.session.user.role;
 
-    console.log(res.locals.user.email)
+    //console.log(res.locals.user.email)
   }
   next();
 });
@@ -192,14 +192,50 @@ app.use((req, res, next) => {
   delete req.session.message
   next()
 })
+app.get('/admin/*', async function (req, res, next) {
 
+
+  if ((!req.session.user)||(req.session.user.role != 1)) {
+    console.log('no access');
+
+    return res.redirect('/');
+  }
+  next();
+
+
+})
+app.get('/profil/*', async function (req, res, next) {
+
+
+  if ((!req.session.user)) {
+    console.log('no access');
+
+    return res.redirect('/');
+  }
+  next();
+
+
+})
+
+app.get('*/create/*', async function (req, res, next) {
+
+
+  if ((!req.session.user)||(req.session.user.role != 1)) {
+    console.log('no access');
+
+    return res.redirect('/');
+  }
+  next();
+
+
+})
 
 
 app.get('/autocomplete', async function (req, res, next) {
 
   // var regex = new RegExp(req.query["term"],'i')
 
-  console.log(req.query)
+  //console.log(req.query)
 
   await mangas.findAll({
     attributes: ['manga_id', 'title'],
@@ -212,7 +248,7 @@ app.get('/autocomplete', async function (req, res, next) {
     limit: 5
   }).then(async function (search) {
 
-   // console.log(search)
+    // console.log(search)
 
     var data = []
 
@@ -220,12 +256,12 @@ app.get('/autocomplete', async function (req, res, next) {
 
       let obj = {
         manga_id: search[i].manga_id,
-        title:search[i].title
+        title: search[i].title
       };
       data.push(obj);
     }
 
-    console.log(data)
+    //console.log(data)
 
     res.jsonp(data)
   })

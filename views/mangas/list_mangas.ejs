@@ -12,12 +12,14 @@
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
         integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+
     <link href="/admin/css/interface.css" rel="stylesheet" />
 
 </head>
 
 <body>
- 
+
 
     <%- include ("../admin/layouts/navbar.ejs") -%>
 
@@ -29,25 +31,27 @@
                 <% for (let i=0; i < mangas.length; i++) { %>
                 <div class="example-1 card">
 
-                    <div class="wrapper"style="
+                    <div class="wrapper" style="
                     background: url(<%= mangas[i].cover %>) 5% 1%/cover no-repeat;
                     width: 65%;
                     ">
-                  
+
 
                         <div class="date">
-                           <a href="/mangas/categorie/<%= mangas[i].category_id %>"><span class="day"> <%= mangas[i].category.label %></span></a>
+                            <a href="/mangas/categorie/<%= mangas[i].category_id %>"><span class="day">
+                                    <%= mangas[i].category.label %></span></a>
                         </div>
                         <div class="data">
                             <div class="content">
-                                <h1 class="title"><a href="/mangas/fiche/<%= mangas[i].manga_id %> %>">Voir la fiche</a></h1>
+                                <h1 class="title"><a href="/mangas/fiche/<%= mangas[i].manga_id %> %>">Voir la fiche</a>
+                                </h1>
                                 <small>Noté en moyenne à <%= mangas[i].score_total %>/5</small>
-                               
+
                             </div>
 
                         </div>
                     </div>
-               
+
                 </div>
                 <% } %>
 
@@ -57,7 +61,7 @@
 
             <h2>Liste des catégories</h2>
             <hr>
-            
+
             <ul id="categorie">
 
                 <%if (!utilities.empty(shonen)) { %>

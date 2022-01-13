@@ -13,14 +13,15 @@
 
 
    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
-      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> 
+      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
    <link href="/admin/css/view.css" rel="stylesheet" />
    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-  
 
-   <title>Lecture du chapitre : <%if(!utilities.empty(chapters_pages)) {  %> <%= chapters_pages[0].chapter.title %> <% } %></title>
 
-  
+   <title>Lecture du chapitre : <%if(!utilities.empty(chapters_pages)) {  %> <%= chapters_pages[0].chapter.title %>
+      <% } %></title>
+
+
 
 </head>
 
@@ -72,11 +73,20 @@
                         href="/mangas/<%= chapters_pages[0].chapter.manga_id %>/page/<%=chapter_id%>/?page=<%=i%>"><%=i%></a>
                   </li>
                   <% } %>
+
+                  <%if (!utilities.empty(locals.user)) {%>
+
                   <%if(!utilities.empty(chapters_pages)) {  %>
 
                   <li class="page-item"><a class="page-link"
                         href="/mangas/<%= chapters_pages[0].chapter.manga_id %>/page/<%=next%>">Next</a></li>
                   <% } %>
+
+                  <% }else{ %>
+
+                  <li onclick="read()" class="page-item"><a class="page-link" href="#">Next</a></li>
+                  <% } %>
+
 
                </ul>
 
@@ -98,6 +108,7 @@
 
       </section>
 
+      <%if (!utilities.empty(locals.user)) {%>
 
       <footer>
          <h2>Lire d'autre chapitres</h2>
@@ -118,6 +129,7 @@
 
          <% } %>
       </footer>
+      <% } %>
 
 
 
@@ -125,6 +137,13 @@
       <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
       <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
       <script src="/admin/js/search.js"></script>
+
+      <script>
+         function read() {
+            alert('Connectez-vous pour pouvoir lire la suite')
+         }
+      </script>
+
 
 
 </body>

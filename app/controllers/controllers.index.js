@@ -15,9 +15,6 @@ const ModelCategory = require("../models/model.category")
 const ModelUserManga = require("../models/model.users_mangas")
 const ModelChapterPage = require("../models/model.chapters_pages")
 const ModelMangasChapters = require("../models/model.mangas_chapter");
-const {
-    data
-} = require('jquery');
 
 
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -27,9 +24,9 @@ const PASSWORD_REGEX = /^(?=.*\d).{4,12}$/;
 exports.index = async (req, res) => {
     const data = new Object();
     data.mangas = await ModelMangas.findAll({
-        where:{
-            score_total:{
-                [Op.gte]:1
+        where: {
+            score_total: {
+                [Op.gte]: 1
             }
         },
         include: [{
@@ -94,42 +91,10 @@ exports.signup_add = async (req, res) => {
 
 
 
-
-
-
     try {
 
-        /**Verifie extention du fichier avant envoie */
-        if (!Utilities.empty(avatar)) {
-
-            if ((avatar.mimetype == 'image/png') ||
-                (avatar.mimetype == 'image/jpg') ||
-                (avatar.mimetype == 'image/jpeg')) {
-
-                await avatar.mv('public/uploads/profil/' + avatar.name, err => {
-                    if (err)
-                        return res.status(500).send(err)
-                });
-                var image_file = '/uploads/profil/' + avatar.name
-
-            } else {
-                req.session.message = {
-                    type: 'danger',
-                    intro: 'Erreur',
-                    message: "Extention du fichier invalide"
-
-                }
-                return res.redirect('/signup');
-
-            }
-        } else {
-            image_file = '/admin/img/user-circle-solid.svg'
-        }
-
-
-
         // verifier si les champs ne son pas vide
-        if (email === '' || password === '' || username === '') {
+        if (Utilities.empty(email) || Utilities.empty(password) || Utilities.empty(username) || Utilities.empty(avatar)) {
             req.session.message = {
                 type: 'danger',
                 intro: 'Erreur',
@@ -157,6 +122,47 @@ exports.signup_add = async (req, res) => {
             }
             return res.redirect('/signup');
         }
+
+
+        /**Verifie extention du fichier avant envoie */
+
+        if (!Utilities.empty(req.files.image)) {
+
+
+            if ((avatar.mimetype == 'image/png') ||
+                (avatar.mimetype == 'image/jpg') ||
+                (avatar.mimetype == 'image/jpeg')) {
+
+
+                fs.mkdir('public/uploads/profil/', {
+                    recursive: true
+                }, (err) => {
+                    if (err)
+                        throw err;
+                });
+
+                await avatar.mv('public/uploads/profil/' + avatar.name, err => {
+                    if (err)
+                        return res.status(500).send(err)
+                });
+                var image_file = '/uploads/profil/' + avatar.name
+
+            } else {
+                req.session.message = {
+                    type: 'danger',
+                    intro: 'Erreur',
+                    message: "Extention du fichier invalide"
+
+                }
+                return res.redirect('/signup');
+
+            }
+        } else {
+            image_file = '/admin/img/user-circle-solid.svg'
+        }
+
+
+
 
         // search si email exsite déjà dans le bdd
 
@@ -191,10 +197,10 @@ exports.signup_add = async (req, res) => {
 
         });
 
-    } catch (error) {
-        console.log(error);
-        var statusCoded = error.response;
 
+
+    } catch (error) {
+        console.log(error)
     }
 
 }
@@ -231,7 +237,7 @@ exports.login_add = async (req, res) => {
         }).then(async function (user) {
             // si email trouvé
             if (user) {
-                console.log(user)
+                //console.log(user)
                 // on verifie si l'utilisateur à utiliser le bon mot de passe avec bcrypt
                 const isEqual = await bcrypt.compare(password, user.password);
                 // Si le mot de passe correpond au caratère hashé
@@ -278,7 +284,7 @@ exports.login_add = async (req, res) => {
         })
 
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         res.redirect('/login');
     }
 
@@ -314,7 +320,8 @@ exports.favoris = async (req, res) => {
 
     data.list_favorie = await ModelUserManga.findAll({
         where: {
-            favoris: true
+            favoris: true,
+            user_id: req.session.user.user_id,
         },
         include: [{
                 model: ModelMangas
@@ -325,7 +332,7 @@ exports.favoris = async (req, res) => {
         ]
     })
 
-   
+
 
     data.shonen = await ModelMangas.findAll({
         where: {
@@ -365,8 +372,8 @@ exports.favoris = async (req, res) => {
 
 exports.favoris_add = async (req, res) => {
 
-    console.log(req.session.user)
-    console.log(req.body)
+    //console.log(req.session.user)
+    // console.log(req.body)
 
     const data = new Object()
     await ModelUserManga.findOne({
@@ -420,7 +427,7 @@ exports.admin = async (req, res) => {
 exports.delete = async (req, res) => {
 
     const manga_id = req.params.manga_id
-    console.log(manga_id)
+    //console.log(manga_id)
 
     await ModelMangas.findOne({
         where: {
@@ -444,8 +451,8 @@ exports.delete = async (req, res) => {
 }
 
 exports.vote = async (req, res) => {
-    console.log(req.session.user)
-    console.log(req.body)
+    // console.log(req.session.user)
+    // console.log(req.body)
 
 
 
