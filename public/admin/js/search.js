@@ -37,9 +37,12 @@ $(document).ready(function ($) {
 
 
             if (ui.item) {
+
+                window.location.replace("mangas/fiche/" + ui.item.value);
+
+               
                 // $('#search').val(ui.item.manga_id)
-                window.location.replace('http://127.0.0.1:8890/mangas/fiche/' + ui.item
-                    .value);
+
 
 
             }
