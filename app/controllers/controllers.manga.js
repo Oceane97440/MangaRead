@@ -267,8 +267,46 @@ exports.categorie = async (req, res) => {
 
 
 }
+exports.category = async (req, res) => {
 
 
+    const data = new Object();
+  
+    data.utilities = Utilities
+
+    res.render("mangas/create_category", data)
+}
+exports.category_add = async (req, res) => {
+
+
+    var body = {
+        label: req.body.label,
+    }
+    //console.log(req.body)
+
+
+
+    await ModelCategory.findOne({
+        attributes: ['label'],
+        where: {
+            label: {[Op.like]:'%'+body.label+'%'}
+        }
+    }).then(async function (categorieFound) {
+
+        if (!categorieFound) {
+            await ModelCategory.create({
+                label: body.label,
+            });
+
+
+          
+
+            res.redirect(`/admin`);
+
+        }
+    });
+
+}
 exports.chapter = async (req, res) => {
 
 
@@ -283,6 +321,8 @@ exports.chapter = async (req, res) => {
 
     res.render("mangas/create_chapter", data)
 }
+
+
 
 exports.chapter_add = async (req, res) => {
 

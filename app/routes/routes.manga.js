@@ -10,6 +10,10 @@ router.get("/create", mangas.mangas);
 router.post("/create", mangas.mangas_add);
 router.get("/fiche/:manga_id", mangas.mangas_view);
 router.get("/categorie/:category_id", mangas.categorie);
+/**Action add categorie*/
+router.get("/category/create", mangas.category);
+router.post("/category/create", mangas.category_add);
+
 
 /**Action add chapitre au manga */
 router.get("/chapter/create/:mangas_id", mangas.chapter);
