@@ -17,6 +17,10 @@ router.get("/list/favoris", index.favoris);
 router.post("/favoris", index.favoris_add);
 router.get("/admin", index.admin);
 router.get("/delete/:manga_id", index.delete);
+router.get("/delete/chapter/:chapter_id", index.delete_chapter);
+router.get("/delete/page/:page_id", index.delete_page);
+
+
 
 router.post("/vote", index.vote);
 

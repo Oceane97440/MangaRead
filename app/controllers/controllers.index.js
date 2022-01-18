@@ -444,7 +444,82 @@ exports.delete = async (req, res) => {
                 }
             });
 
-            res.redirect('/admin')
+            await ModelMangasChapters.destroy({
+                where: {
+                    manga_id: manga_id
+                }
+            })
+
+            await ModelChapter.destroy({
+                where: {
+                    manga_id: manga_id
+                }
+            })
+
+             res.redirect('/admin')
+        }
+    })
+
+}
+
+exports.delete_chapter = async (req, res) => {
+
+    const chapter_id = req.params.chapter_id
+    //console.log(manga_id)
+
+    await ModelChapter.findOne({
+        where: {
+            chapter_id: chapter_id,
+
+        }
+    }).then(async function (chapterFound) {
+
+        if (chapterFound) {
+            await ModelChapter.destroy({
+                where: {
+                    chapter_id: chapter_id
+                }
+            });
+
+            await ModelChapterPage.destroy({
+                where: {
+                    chapter_id: chapter_id
+                }
+            })
+
+         
+             res.redirect(`/mangas/chapter/${chapterFound.manga_id}`)
+        }
+    })
+
+}
+exports.delete_page = async (req, res) => {
+
+    const page_id = req.params.page_id
+    //console.log(manga_id)
+
+    await ModelChapterPage.findOne({
+        where: {
+            page_id: page_id,
+
+        }
+    }).then(async function (pageFound) {
+
+        if (pageFound) {
+            await ModelPage.destroy({
+                where: {
+                    page_id: page_id
+                }
+            });
+
+            await ModelChapterPage.destroy({
+                where: {
+                    page_id: page_id
+                }
+            })
+
+         
+             res.redirect(`/mangas/pages/${pageFound.chapter_id}`)
         }
     })
 

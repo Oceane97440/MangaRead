@@ -204,6 +204,18 @@ app.get('/admin/*', async function (req, res, next) {
 
 
 })
+app.get('/delete/*', async function (req, res, next) {
+
+
+  if ((!req.session.user)||(req.session.user.role != 1)) {
+    console.log('no access');
+
+    return res.redirect('/');
+  }
+  next();
+
+
+})
 app.get('/profil/*', async function (req, res, next) {
 
 
